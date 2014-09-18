@@ -1,3 +1,10 @@
+function pluralize(count, str) {
+	if (count === 1) {
+		return count + ' ' + str;
+	} else {
+		return count + ' ' + str + 's';
+	}
+}
 
 function getImageUrlsFromTabs(callback) {
 	chrome.tabs.query(
@@ -36,9 +43,9 @@ function showImageUrls() {
 
 		var message = document.getElementById('message');
 		if (urls.length > 0) {
-			message.innerText = urls.length + " images in current window";
+			message.innerText = pluralize(urls.length, "image") + " in current window:";
 		} else {
-			message.innerText = "No images opened in current window. Open images in tabs (.jpg, .png, .gif) in order for this extension to download it.";
+			message.innerText = "No images opened in current window. Images must be open in tabs to be downloaded.";
 			$('#download').hide();
 			$('#dismiss').show();
 		}
@@ -68,9 +75,6 @@ function closePopup() {
 window.onload = function() {
 	showImageUrls();
 
-	// document.getElementById('download').addEventListener('click', downloadImageUrls);
-
 	$('#download').click(downloadImageUrls);
-
 	$('#dismiss').click(closePopup);
 };
