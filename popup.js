@@ -1,34 +1,13 @@
 
-function getImageUrlsFromTabs() {
-	var urls = [];
-
+function getImageUrlsFromTabs(callback) {
 	chrome.tabs.query(
 		{currentWindow: true},
 		function(tabs) {
+			var urls = [];
 			for (var i = 0; i < tabs.length; i++) {
-				urls.push(tabs[i].url);
-			}
-		}
-	);
+				var url = tabs[i].url;
 
-	return urls;
-}
-
-function showImageUrlsFromTabs() {
-	var linkList = document.getElementById('links');
-
-	
-	chrome.tabs.query(
-		{	
-			currentWindow: true
-		},
-
-		// NOTE this is async
-		function(tabs) {
-			for (var i = 0; i < tabs.length; i++) {
-				// just for display purposes
-				var url  = tabs[i].url;
-
+				// TODO add more extensions
 				// filter to only tabs with image extensions
 				if (
 						!url.match(new RegExp("https?://.*\.jpg")) &&
@@ -36,27 +15,63 @@ function showImageUrlsFromTabs() {
 						!url.match(new RegExp("https?://.*\.png"))) {
 					continue;
 				}
-
-				var link = document.createElement('li');
-				link.innerText = url;
-				linkList.appendChild(link);
-
-				// actual download
-				chrome.downloads.download({
-					url: url,
-
-					// TODO add user-editable setting for what conflict action to use
-					conflictAction: "uniquify"
-				}, function(id) {});
+				
+				urls.push(url);
 			}
+
+			callback(urls);
 		}
 	);
 }
 
-function downloadUrls(urls) {
+function showImageUrls() {
+	getImageUrlsFromTabs(function(urls) {
+		var linkList = document.getElementById('links');
+		for (var i = 0; i < urls.length; i++) {
+			var url = urls[i];
 
+			var link = document.createElement('li');
+			link.innerText = url;
+			linkList.appendChild(link);
+		}
+
+		var message = document.getElementById('message');
+		if (urls.length > 0) {
+			message.innerText = urls.length + " images in current window";
+		} else {
+			message.innerText = "No images opened in current window. Open images in tabs (.jpg, .png, .gif) in order for this extension to download it.";
+			$('#download').hide();
+			$('#dismiss').show();
+		}
+	});
 }
 
+function downloadImageUrls() {
+	getImageUrlsFromTabs(function(urls) {
+		for (var i = 0; i < urls.length; i++) {
+			var url = urls[i];
+
+			chrome.downloads.download({
+				url: url,
+
+				// TODO add user-editable setting for what conflict action to use
+				conflictAction: "uniquify"
+			}, function(id) {});
+		}
+	});
+}
+
+function closePopup() {
+    window.close();
+}
+
+// TODO domready
 window.onload = function() {
-	showImageUrlsFromTabs();
+	showImageUrls();
+
+	// document.getElementById('download').addEventListener('click', downloadImageUrls);
+
+	$('#download').click(downloadImageUrls);
+
+	$('#dismiss').click(closePopup);
 };

@@ -1,8 +1,45 @@
 <!DOCTYPE html>
 	<head>
+		<style>
+			body {
+				padding: 0.5em 1em;
+				width: 24em;
+
+				font-family: Arial, sans-serif;
+			}
+			h1 {
+				font-size: 1em;
+			}
+			#dismiss {
+				display: none;
+			}
+			button {
+				background: #43a0de;
+				color: #fff;
+				border: none;
+				outline: none;
+				border-radius: 4px;
+				padding: 1em 2em;
+				text-transform: uppercase;
+				font-weight: bold;
+				font-size: 0.9em;
+				cursor: pointer;
+			}
+			button:hover {
+				background: #175681;
+			}
+		</style>
+
+		<script src="jquery-2.1.1.min.js"></script>
 		<script src="popup.js"></script>
 	</head>
 	<body>
+		<h1>Save Tabbed Images</h1>
+		<p id="message"></p>
+
 		<ul id="links"></ul>
+
+		<button id="download">Download images</button>
+		<button id="dismiss">Got it</button>
 	</body>
 </html>
