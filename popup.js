@@ -26,13 +26,12 @@ function getImageUrlsFromTabs(callback) {
 
 function showImageUrls() {
 	getImageUrlsFromTabs(function(urls) {
-		var linkList = document.getElementById('links');
+		var linkList = $('#links');
 		for (var i = 0; i < urls.length; i++) {
-			var url = urls[i];
+			var url = $('<a></a>').text(urls[i]).prop('href', urls[i]);
 
-			var link = document.createElement('li');
-			link.innerText = url;
-			linkList.appendChild(link);
+			var link = $('<li></li>').append(url);
+			linkList.append(link);
 		}
 
 		var message = document.getElementById('message');
