@@ -7,6 +7,10 @@ Download all images opened as tabs in one easy click.
 
 [Link to extension admin](https://chrome.google.com/webstore/developer/edit/hhcoikfhkkadkgklepjkfgafmjoggefh)
 
+## Reference
+
+* [Detecting MIME type](http://stackoverflow.com/a/21042958/341512)
+
 ## TODO
 
 * Allow specifying custom subdirectory of downloads folder via chrome.downloads.download "filename" option
