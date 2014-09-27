@@ -1,13 +1,14 @@
 var tabsWithImages = {};
 
 var imageMimeTypes = {
-	"image/jpeg",
-	"image/png",
-	"image/gif",
-	"image/webp",
-	"image/tiff"
+	"image/jpeg": true,
+	"image/png":  true,
+	"image/gif":  true,
+	"image/webp": true,
+	"image/tiff": true
 };
 
+// Track which tabs are images based on MIME type
 chrome.webRequest.onHeadersReceived.addListener(function(details) {
 	if (details.tabId !== -1) {
 		var header = getHeaderByName(details.responseHeaders, 'content-type');
@@ -33,3 +34,20 @@ function getHeaderByName(headers, name) {
         }
     }
 }
+
+// Given array of tabs, return URLs of those which are images
+chrome.runtime.onMessage.addListener(
+	function(request, sender, sendResponse) {
+		var urls = [];
+		if (request.type === "checktabs") {
+			var tabs = request.tabs;
+			for (var i = 0; i < tabs.length; i++) {
+				var tab = tabs[i];
+				if (tabsWithImages[tab.id]) {
+					urls.push(tab.url);
+				}
+			}
+		}
+		sendResponse({urls: urls});
+	}
+);

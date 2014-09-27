@@ -11,28 +11,19 @@ function getImageUrlsFromTabs(callback) {
 		{currentWindow: true},
 		function(tabs) {
 			var urls = [];
-			for (var i = 0; i < tabs.length; i++) {
-				var url = tabs[i].url;
 
-				// TODO add more extensions
-				// filter to only tabs with image extensions
-				if (
-						!url.match(new RegExp("https?://.*\.jpg")) &&
-						!url.match(new RegExp("https?://.*\.gif")) &&
-						!url.match(new RegExp("https?://.*\.png"))) {
-					continue;
-				}
-				
-				urls.push(url);
-			}
-
-			callback(urls);
+			// Query background process for which tabs are images
+			chrome.runtime.sendMessage({type: "checktabs", tabs: tabs}, function(response) {
+				callback(response.urls);
+			});
 		}
 	);
 }
 
+// List image URLs in popup
 function showImageUrls() {
 	getImageUrlsFromTabs(function(urls) {
+		// Add URLs to list
 		var linkList = $('#links');
 		for (var i = 0; i < urls.length; i++) {
 			var url = $('<a></a>').text(urls[i]).prop('href', urls[i]);
@@ -45,6 +36,7 @@ function showImageUrls() {
 		if (urls.length > 0) {
 			message.innerText = pluralize(urls.length, "image") + " in current window:";
 		} else {
+			// No images are loaded
 			message.innerText = "No images opened in current window. Images must be open in tabs to be downloaded.";
 			$('#download').hide();
 			$('#dismiss').show();
