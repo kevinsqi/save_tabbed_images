@@ -63,8 +63,21 @@ function closePopup() {
     window.close();
 }
 
-// TODO domready
+// TODO currently unused
+function timestampedFolderName() {
+	moment().format('YYYY-MM-DD') + "/"
+}
+
+// TODO domready?
 window.onload = function() {
+	chrome.downloads.onDeterminingFilename.addListener(function(downloadItem, suggest) {
+		// TODO add "foldername/" before downloadItem.filename to add subdirectory.
+		// but it doesn't guarantee batching all downloads correctly.
+		suggest({
+			filename: downloadItem.filename,
+		});
+	});
+
 	showImageUrls();
 
 	$('#download').click(downloadImageUrls);

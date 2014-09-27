@@ -16,7 +16,6 @@ chrome.webRequest.onHeadersReceived.addListener(function(details) {
 		// If header is set, use its value. Otherwise, use undefined.
 		var headerValue = header && header.value.split(';', 1)[0];
 
-		// Store 
 		if (imageMimeTypes[headerValue]) {
 			tabsWithImages[details.tabId] = true;
 		}
@@ -38,8 +37,8 @@ function getHeaderByName(headers, name) {
 // Given array of tabs, return URLs of those which are images
 chrome.runtime.onMessage.addListener(
 	function(request, sender, sendResponse) {
-		var urls = [];
 		if (request.type === "checktabs") {
+			var urls = [];
 			var tabs = request.tabs;
 			for (var i = 0; i < tabs.length; i++) {
 				var tab = tabs[i];
@@ -47,7 +46,7 @@ chrome.runtime.onMessage.addListener(
 					urls.push(tab.url);
 				}
 			}
+			sendResponse({urls: urls});
 		}
-		sendResponse({urls: urls});
 	}
 );
