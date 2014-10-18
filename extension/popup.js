@@ -50,11 +50,14 @@ function downloadImageUrls() {
 			var url = urls[i];
 
 			chrome.downloads.download({
-				url: url,
-
-				// TODO add user-editable setting for what conflict action to use
-				conflictAction: "uniquify"
-			}, function(id) {});
+					url: url,
+					conflictAction: "uniquify" // TODO add user-editable setting for what conflict action to use
+				}, function(id) {
+					if (!id) {
+						// TODO Handle failed download
+					}
+				}
+			);
 		}
 	});
 }
@@ -70,7 +73,8 @@ function timestampedFolderName() {
 
 // TODO domready?
 window.onload = function() {
-	/*
+	/* TODO - WIP custom subdirectories in Downloads folder
+
 	chrome.downloads.onDeterminingFilename.addListener(function(downloadItem, suggest) {
 		// TODO add "foldername/" before downloadItem.filename to add subdirectory.
 		// but it doesn't guarantee batching all downloads correctly.

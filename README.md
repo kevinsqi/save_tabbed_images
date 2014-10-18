@@ -41,4 +41,5 @@ Download all images opened as tabs in one easy click.
 
 * Add number of current windows with images to icon
 
-* Remove jquery dependency for something lighter?
+* Optimization - remove additional request?
+	* Simulate "drag and drop" of image file?
