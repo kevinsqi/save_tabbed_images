@@ -4,8 +4,15 @@ var imageMimeTypes = {
 	"image/jpeg": true,
 	"image/png":  true,
 	"image/gif":  true,
-	"image/webp": true,
-	"image/tiff": true
+	"image/webp": true
+};
+
+var imageExtensions = {
+	"jpg":  true,
+	"jpeg": true,
+	"png":  true,
+	"gif":  true,
+	"webp": true
 };
 
 // Track which tabs are images based on MIME type
@@ -44,6 +51,13 @@ chrome.runtime.onMessage.addListener(
 				var tab = tabs[i];
 				if (tabsWithImages[tab.id]) {
 					urls.push(tab.url);
+				} else if (match = tab.url.match(/.+\.([^?]+)(\?|$)/)) {  // regex captures the URL's file extension
+					// If we didn't get it from MIME checking (i.e. if extension had been disabled or just installed), check the file extension as a fallback.
+					// Can create false positives, but better than overlooking files.
+					var ext = match[1].toLowerCase();
+					if (imageExtensions[ext]) {
+						urls.push(tab.url);
+					}
 				}
 			}
 			sendResponse({urls: urls});
