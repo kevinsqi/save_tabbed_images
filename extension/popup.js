@@ -32,12 +32,13 @@ function showImageUrls() {
 			linkList.append(link);
 		}
 
-		var message = document.getElementById('message');
+		var message = $('#message');
 		if (urls.length > 0) {
-			message.innerText = pluralize(urls.length, "image") + " in current window:";
+			message.text(pluralize(urls.length, "image") + " in current window:");
+			$('#download').text('Download ' + pluralize(urls.length, "image"));
 		} else {
 			// No images are loaded
-			message.innerText = "No images opened in current window. Images must be open in tabs to be downloaded.";
+			message.text("No images opened in current window. Images must be open in tabs to be downloaded.");
 			$('#download').hide();
 			$('#dismiss').show();
 		}

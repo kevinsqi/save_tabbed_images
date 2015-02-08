@@ -2,8 +2,8 @@
 	<head>
 		<style>
 			body {
-				padding: 0.5em 1em;
-				width: 24em;
+				padding: 1em;
+				width: 16em;
 
 				font-family: Arial, sans-serif;
 				font-size: 14px;
@@ -16,9 +16,12 @@
 			}
 			#dismiss {
 				display: none;
+				background: #aaa;
 			}
 			#links {
 				font-size: 0.8em;
+				overflow-y: auto;
+				max-height: 20em;
 			}
 			#links li {
 				overflow: hidden;
@@ -26,14 +29,15 @@
 				white-space: nowrap;
 			}
 			button {
+				width: 100%;
 				background: #43a0de;
 				color: #fff;
 				border: none;
 				outline: none;
 				border-radius: 4px;
 				padding: 1em 2em;
-				font-weight: bold;
-				font-size: 0.9em;
+				// font-weight: bold;
+				font-size: 1.1em;
 				cursor: pointer;
 			}
 			button:hover {
@@ -45,6 +49,7 @@
 			}
 			a {
 				text-decoration: none;
+				color: #aaa;
 			}
 		</style>
 
@@ -53,12 +58,10 @@
 		<script src="popup.js"></script>
 	</head>
 	<body>
-		<h1>Save Tabbed Images</h1>
+		<button id="download"></button>
 		<p id="message"></p>
+		<button id="dismiss">Dismiss</button>
 
 		<ul id="links"></ul>
-
-		<button id="download">Download images</button>
-		<button id="dismiss">Got it!</button>
 	</body>
 </html>
