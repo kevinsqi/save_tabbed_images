@@ -23,9 +23,8 @@ chrome.webRequest.onHeadersReceived.addListener(function(details) {
 		// If header is set, use its value. Otherwise, use undefined.
 		var headerValue = header && header.value.split(';', 1)[0];
 
-		if (imageMimeTypes[headerValue]) {
-			tabsWithImages[details.tabId] = true;
-		}
+		// If false, we know tab is not an image, and skip fallback check.
+		tabsWithImages[details.tabId] = imageMimeTypes[headerValue] || false;
 	}
 }, {
 	urls: ['*://*/*'],
@@ -49,8 +48,10 @@ chrome.runtime.onMessage.addListener(
 			var tabs = request.tabs;
 			for (var i = 0; i < tabs.length; i++) {
 				var tab = tabs[i];
-				if (tabsWithImages[tab.id]) {
+				if (tabsWithImages[tab.id] === true) {
 					urls.push(tab.url);
+				} else if (tabsWithImages[tab.id] === false) {
+					// Tab is not an image, do nothing.
 				} else if (match = tab.url.match(/.+\.([^?]+)(\?|$)/)) {  // regex captures the URL's file extension
 					// If we didn't get it from MIME checking (i.e. if extension had been disabled or just installed), check the file extension as a fallback.
 					// Can create false positives, but better than overlooking files.
