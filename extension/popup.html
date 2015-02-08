@@ -14,9 +14,12 @@
 				color: #43a0de;
 				text-transform: uppercase;
 			}
-			#dismiss {
-				display: none;
-				background: #aaa;
+			ul {
+				list-style-type: none;
+				padding-left: 0;
+			}
+			a {
+				text-decoration: none;
 			}
 			#links {
 				font-size: 0.8em;
@@ -55,42 +58,45 @@
 			}
 			button {
 				width: 100%;
-				background: #43a0de;
+				background: #aaa;
 				color: #fff;
 				border: none;
 				outline: none;
 				border-radius: 4px;
-				padding: 1em 2em;
-				// font-weight: bold;
+				padding: 1em 0.5em;
 				font-size: 1.1em;
 				cursor: pointer;
 			}
 			button:disabled {
 				opacity: 0.3;
 			}
-			button:disabled:hover {
+			button:hover {
+				background: #888;
+			}
+			#download {
 				background: #43a0de;
 			}
-			button:hover {
+			#download:hover {
 				background: #175681;
 			}
-			ul {
-				list-style-type: none;
-				padding-left: 0;
+			#dismiss {
+				display: none;
+				
 			}
-			a {
-				text-decoration: none;
+			#close-tabs {
+				display: none;
 			}
+
 		</style>
 
 		<script src="jquery-2.1.1.min.js"></script>
-		<script src="moment.js"></script>
 		<script src="popup.js"></script>
 	</head>
 	<body>
 		<button id="download"></button>
 		<p id="message"></p>
 		<ul id="links"></ul>
+		<button id="close-tabs">Close Downloaded Tabs</button>
 		<button id="dismiss">Close</button>
 	</body>
 </html>

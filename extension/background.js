@@ -44,12 +44,13 @@ function getHeaderByName(headers, name) {
 chrome.runtime.onMessage.addListener(
 	function(request, sender, sendResponse) {
 		if (request.type === "checktabs") {
-			var urls = [];
+			var tabsToReturn = [];
 			var tabs = request.tabs;
 			for (var i = 0; i < tabs.length; i++) {
 				var tab = tabs[i];
+				var tabObj = {id: tab.id, url: tab.url};
 				if (tabsWithImages[tab.id] === true) {
-					urls.push(tab.url);
+					tabsToReturn.push(tabObj);
 				} else if (tabsWithImages[tab.id] === false) {
 					// Tab is not an image, do nothing.
 				} else if (match = tab.url.match(/.+\.([^?]+)(\?|$)/)) {  // regex captures the URL's file extension
@@ -57,11 +58,11 @@ chrome.runtime.onMessage.addListener(
 					// Can create false positives, but better than overlooking files.
 					var ext = match[1].toLowerCase();
 					if (imageExtensions[ext]) {
-						urls.push(tab.url);
+						tabsToReturn.push(tabObj);
 					}
 				}
 			}
-			sendResponse({urls: urls});
+			sendResponse({tabs: tabsToReturn});
 		}
 	}
 );

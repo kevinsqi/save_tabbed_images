@@ -1,3 +1,6 @@
+// Globals
+var tabDownloadStatuses = {};
+
 function pluralize(count, str) {
 	if (count === 1) {
 		return count + ' ' + str;
@@ -6,15 +9,13 @@ function pluralize(count, str) {
 	}
 }
 
-function getImageUrlsFromTabs(callback) {
+function getTabsWithImages(callback) {
 	chrome.tabs.query(
 		{currentWindow: true},
 		function(tabs) {
-			var urls = [];
-
 			// Query background process for which tabs are images
 			chrome.runtime.sendMessage({type: "checktabs", tabs: tabs}, function(response) {
-				callback(response.urls);
+				callback(response.tabs);
 			});
 		}
 	);
@@ -22,21 +23,21 @@ function getImageUrlsFromTabs(callback) {
 
 // List image URLs in popup
 function showImageUrls() {
-	getImageUrlsFromTabs(function(urls) {
+	getTabsWithImages(function(tabs) {
 		// Add URLs to list
-		var linkList = $('#links');
-		for (var i = 0; i < urls.length; i++) {
-			var url = $('<a></a>').text(urls[i]).prop('href', urls[i]);
-
-			var link = $('<li></li>').append(url);
-			linkList.append(link);
+		var links = $('#links');
+		for (var i = 0; i < tabs.length; i++) {
+			var url = tabs[i].url;
+			var link = $('<a></a>').text(url).prop('href', url);
+			var listItem = $('<li></li>').append(link);
+			links.append(listItem);
 		}
 
 		// Customize controls
 		var message = $('#message');
-		if (urls.length > 0) {
-			message.text(pluralize(urls.length, "image") + " in current window:");
-			$('#download').text('Download ' + pluralize(urls.length, "image"));
+		if (tabs.length > 0) {
+			message.text(pluralize(tabs.length, "image") + " in current window:");
+			$('#download').text('Download ' + pluralize(tabs.length, "image"));
 		} else {
 			// No images are loaded
 			message.text("No images opened in current window. Images must be open in tabs to be downloaded.");
@@ -48,31 +49,48 @@ function showImageUrls() {
 
 function downloadImageUrls() {
 	$('#download').prop('disabled', 'disabled');
-	$('#dismiss').show();
+	$('#close-tabs').show();
 
-	getImageUrlsFromTabs(function(urls) {
-		for (var i = 0; i < urls.length; i++) {
-			var url = urls[i];
+	getTabsWithImages(function(tabs) {
+		for (var i = 0; i < tabs.length; i++) {
+			(function() {
+				var url = tabs[i].url;
+				var tabId = tabs[i].id;
 
-			chrome.downloads.download({
-					url: url,
-					conflictAction: "uniquify" // TODO add user-editable setting for what conflict action to use
-				}, function(id) {
-					if (id) {
-						// Download successful
-						$('#links li a[href="' + url + '"]').parent().addClass('done');
-					} else {
-						// Download failed
-						$('#links li a[href="' + url + '"]').parent().addClass('error');
+				chrome.downloads.download({
+						url: url,
+						conflictAction: "uniquify" // TODO add user-editable setting for what conflict action to use
+					}, function(id) {
+						if (id) {
+							// Download successful
+							$('#links li a[href="' + url + '"]').parent().addClass('done');
+							tabDownloadStatuses[tabId] = true;
+						} else {
+							// Download failed
+							$('#links li a[href="' + url + '"]').parent().addClass('error');
+							tabDownloadStatuses[tabId] = false;
+						}
 					}
-				}
-			);
+				);
+			})();
 		}
 	});
 }
 
 function closePopup() {
     window.close();
+}
+
+function closeDownloadedTabs() {
+	var tabIds = [];
+	for (var id in tabDownloadStatuses) {
+		if (tabDownloadStatuses.hasOwnProperty(id)) {
+			if (tabDownloadStatuses[id] === true) {
+				tabIds.push(parseInt(id));
+			}
+		}
+	}
+	chrome.tabs.remove(tabIds);
 }
 
 // TODO currently unused
@@ -97,4 +115,5 @@ window.onload = function() {
 
 	$('#download').click(downloadImageUrls);
 	$('#dismiss').click(closePopup);
+	$('#close-tabs').click(closeDownloadedTabs);
 };
