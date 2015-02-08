@@ -28,6 +28,31 @@
 				text-overflow: ellipsis;
 				white-space: nowrap;
 			}
+			#links li a {
+				color: #aaa;
+			}
+			#links li.done a {
+				color: #999;
+			}
+			#links li.error a {
+				color: #f66;
+			}
+			#links li.done a:before {
+				content: "Done";
+				background: #43a0de;
+				color: #fff;
+				display: inline-block;
+				padding: 0 0.5em;
+				margin-right: 0.5em;
+			}
+			#links li.error a:before {
+				content: "Error";
+				background: #f66;
+				color: #fff;
+				display: inline-block;
+				padding: 0 0.5em;
+				margin-right: 0.5em;
+			}
 			button {
 				width: 100%;
 				background: #43a0de;
@@ -40,6 +65,12 @@
 				font-size: 1.1em;
 				cursor: pointer;
 			}
+			button:disabled {
+				opacity: 0.3;
+			}
+			button:disabled:hover {
+				background: #43a0de;
+			}
 			button:hover {
 				background: #175681;
 			}
@@ -49,7 +80,6 @@
 			}
 			a {
 				text-decoration: none;
-				color: #aaa;
 			}
 		</style>
 
@@ -60,8 +90,7 @@
 	<body>
 		<button id="download"></button>
 		<p id="message"></p>
-		<button id="dismiss">Dismiss</button>
-
 		<ul id="links"></ul>
+		<button id="dismiss">Close</button>
 	</body>
 </html>

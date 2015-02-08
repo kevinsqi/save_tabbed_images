@@ -32,6 +32,7 @@ function showImageUrls() {
 			linkList.append(link);
 		}
 
+		// Customize controls
 		var message = $('#message');
 		if (urls.length > 0) {
 			message.text(pluralize(urls.length, "image") + " in current window:");
@@ -46,6 +47,9 @@ function showImageUrls() {
 }
 
 function downloadImageUrls() {
+	$('#download').prop('disabled', 'disabled');
+	$('#dismiss').show();
+
 	getImageUrlsFromTabs(function(urls) {
 		for (var i = 0; i < urls.length; i++) {
 			var url = urls[i];
@@ -54,8 +58,12 @@ function downloadImageUrls() {
 					url: url,
 					conflictAction: "uniquify" // TODO add user-editable setting for what conflict action to use
 				}, function(id) {
-					if (!id) {
-						// TODO Handle failed download
+					if (id) {
+						// Download successful
+						$('#links li a[href="' + url + '"]').parent().addClass('done');
+					} else {
+						// Download failed
+						$('#links li a[href="' + url + '"]').parent().addClass('error');
 					}
 				}
 			);
