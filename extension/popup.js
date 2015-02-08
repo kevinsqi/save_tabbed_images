@@ -40,7 +40,7 @@ function showImageUrls() {
 			$('#download').text('Download ' + pluralize(tabs.length, "image"));
 		} else {
 			// No images are loaded
-			message.text("No images opened in current window. Images must be open in tabs to be downloaded.");
+			message.text("No images opened as tabs in current window.");
 			$('#download').hide();
 			$('#dismiss').show();
 		}
