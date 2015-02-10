@@ -40,9 +40,9 @@ Medium priority:
 Low priority or unconfirmed:
 
 * Switch to using handlebars templating?
-* Better feedback after clicking "download" - say where the files are downloaded to (i.e. chrome.downloads.showDefaultFolder())
+* Make icon colored if there are images available, grey otherwise
 
+* Better feedback after clicking "download" - say where the files are downloaded to (i.e. chrome.downloads.showDefaultFolder())
 * JS error in dev tools?
 	Missing reference to chrome.tabs.query?
 	"Uncaught TypeError: Cannot read property 'query' of undefined"
-* Add number of current windows with images to icon
