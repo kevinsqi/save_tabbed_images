@@ -39,6 +39,7 @@ Medium priority:
 
 Low priority or unconfirmed:
 
+* Add javascript tests
 * Switch to using handlebars templating?
 * Make icon colored if there are images available, grey otherwise
 

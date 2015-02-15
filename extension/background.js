@@ -18,15 +18,7 @@ var imageExtensions = {
 // Track which tabs are images based on MIME type
 chrome.webRequest.onHeadersReceived.addListener(function(details) {
 	if (details.tabId !== -1) {
-		var header = getHeaderByName(details.responseHeaders, 'content-type');
-
-		// If header is set, use its value. Otherwise, use undefined.
-		var headerValue = header && header.value.split(';', 1)[0];
-
-		// Normalize case
-		if (headerValue) {
-			headerValue = headerValue.toLowerCase();
-		}
+		var headerValue = getContentTypeHeader(details.responseHeaders);
 
 		// If false, we know tab is not an image, and skip fallback check.
 		tabsWithImages[details.tabId] = imageMimeTypes[headerValue] || false;
@@ -36,13 +28,27 @@ chrome.webRequest.onHeadersReceived.addListener(function(details) {
 	types: ['main_frame']
 }, ['responseHeaders']);
 
-function getHeaderByName(headers, name) {
+function getContentTypeHeader(headers) {
+	var contentTypeHeader;
+	var contentTypeHeaderValue;
+
     for (var i = 0; i < headers.length; ++i) {
-        var header = headers[i];
-        if (header.name.toLowerCase() === name) {
-            return header;
+        var header = headers[i].toLowerCase();
+        if (header.name === 'content-type') {
+            contentTypeHeader = header;
+            break;
         }
     }
+
+	// If header is set, use its value. Otherwise, use undefined.
+    contentTypeHeaderValue = contentTypeHeader && contentTypeHeader.value.split(';', 1)[0];
+
+	// Normalize case
+	if (contentTypeHeaderValue) {
+		contentTypeHeaderValue = contentTypeHeaderValue.toLowerCase();
+	}
+
+	return contentTypeHeaderValue;
 }
 
 // Given array of tabs, return URLs of those which are images
