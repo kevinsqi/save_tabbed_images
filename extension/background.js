@@ -33,20 +33,15 @@ function getContentTypeHeader(headers) {
   var contentTypeHeaderValue;
 
   for (var i = 0; i < headers.length; ++i) {
-    var header = headers[i].toLowerCase();
-    if (header.name === 'content-type') {
+    var header = headers[i];
+    if (header.name.toLowerCase() === 'content-type') {
       contentTypeHeader = header;
       break;
     }
   }
 
   // If header is set, use its value. Otherwise, use undefined.
-  contentTypeHeaderValue = contentTypeHeader && contentTypeHeader.value.split(';', 1)[0];
-
-  // Normalize case
-  if (contentTypeHeaderValue) {
-    contentTypeHeaderValue = contentTypeHeaderValue.toLowerCase();
-  }
+  contentTypeHeaderValue = contentTypeHeader && contentTypeHeader.value.toLowerCase().split(';', 1)[0];
 
   return contentTypeHeaderValue;
 }
