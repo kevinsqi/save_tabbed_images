@@ -23,6 +23,11 @@ chrome.webRequest.onHeadersReceived.addListener(function(details) {
 		// If header is set, use its value. Otherwise, use undefined.
 		var headerValue = header && header.value.split(';', 1)[0];
 
+		// Normalize case
+		if (headerValue) {
+			headerValue = headerValue.toLowerCase();
+		}
+
 		// If false, we know tab is not an image, and skip fallback check.
 		tabsWithImages[details.tabId] = imageMimeTypes[headerValue] || false;
 	}
