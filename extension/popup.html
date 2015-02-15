@@ -1,102 +1,100 @@
 <!DOCTYPE html>
-	<head>
-		<style>
-			body {
-				padding: 1em;
-				width: 16em;
+  <head>
+    <style>
+      body {
+        padding: 1em;
+        width: 16em;
 
-				font-family: Arial, sans-serif;
-				font-size: 14px;
-				line-height: 1.3;
-			}
-			h1 {
-				font-size: 0.9em;
-				color: #43a0de;
-				text-transform: uppercase;
-			}
-			ul {
-				list-style-type: none;
-				padding-left: 0;
-			}
-			a {
-				text-decoration: none;
-			}
-			#links {
-				font-size: 0.8em;
-				overflow-y: auto;
-				max-height: 20em;
-			}
-			#links li {
-				overflow: hidden;
-				text-overflow: ellipsis;
-				white-space: nowrap;
-			}
-			#links li a {
-				color: #aaa;
-			}
-			#links li.done a {
-				color: #999;
-			}
-			#links li.error a {
-				color: #f66;
-			}
-			#links li.done a:before {
-				content: "Done";
-				background: #43a0de;
-				color: #fff;
-				display: inline-block;
-				padding: 0 0.5em;
-				margin-right: 0.5em;
-			}
-			#links li.error a:before {
-				content: "Error";
-				background: #f66;
-				color: #fff;
-				display: inline-block;
-				padding: 0 0.5em;
-				margin-right: 0.5em;
-			}
-			button {
-				width: 100%;
-				background: #aaa;
-				color: #fff;
-				border: none;
-				outline: none;
-				border-radius: 4px;
-				padding: 1em 0.5em;
-				font-size: 1.1em;
-				cursor: pointer;
-			}
-			button:disabled {
-				opacity: 0.3;
-			}
-			button:hover {
-				background: #888;
-			}
-			#download {
-				background: #43a0de;
-			}
-			#download:hover {
-				background: #175681;
-			}
-			#dismiss {
-				display: none;
-				
-			}
-			#close-tabs {
-				display: none;
-			}
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        line-height: 1.3;
+      }
+      h1 {
+        font-size: 0.9em;
+        color: #43a0de;
+        text-transform: uppercase;
+      }
+      ul {
+        list-style-type: none;
+        padding-left: 0;
+      }
+      a {
+        text-decoration: none;
+      }
+      #links {
+        font-size: 0.8em;
+        overflow-y: auto;
+        max-height: 20em;
+      }
+      #links li {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      #links li a {
+        color: #aaa;
+      }
+      #links li.done a {
+        color: #999;
+      }
+      #links li.error a {
+        color: #f66;
+      }
+      #links li.done a:before {
+        content: "Done";
+        background: #43a0de;
+        color: #fff;
+        display: inline-block;
+        padding: 0 0.5em;
+        margin-right: 0.5em;
+      }
+      #links li.error a:before {
+        content: "Error";
+        background: #f66;
+        color: #fff;
+        display: inline-block;
+        padding: 0 0.5em;
+        margin-right: 0.5em;
+      }
+      button {
+        width: 100%;
+        background: #aaa;
+        color: #fff;
+        border: none;
+        outline: none;
+        border-radius: 4px;
+        padding: 1em 0.5em;
+        font-size: 1.1em;
+        cursor: pointer;
+      }
+      button:disabled {
+        opacity: 0.3;
+      }
+      button:hover {
+        background: #888;
+      }
+      #download {
+        background: #43a0de;
+      }
+      #download:hover {
+        background: #175681;
+      }
+      #dismiss {
+        display: none;
+      }
+      #close-tabs {
+        display: none;
+      }
+    </style>
 
-		</style>
-
-		<script src="jquery-2.1.1.min.js"></script>
-		<script src="popup.js"></script>
-	</head>
-	<body>
-		<button id="download"></button>
-		<p id="message"></p>
-		<ul id="links"></ul>
-		<button id="close-tabs">Close Downloaded Tabs</button>
-		<button id="dismiss">Close</button>
-	</body>
+    <script src="jquery-2.1.1.min.js"></script>
+    <script src="popup.js"></script>
+  </head>
+  <body>
+    <button id="download"></button>
+    <p id="message"></p>
+    <ul id="links"></ul>
+    <button id="close-tabs">Close Downloaded Tabs</button>
+    <button id="dismiss">Close</button>
+  </body>
 </html>
