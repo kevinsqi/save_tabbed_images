@@ -48,10 +48,15 @@ function showImageUrls() {
 }
 
 function downloadImageUrls() {
-  $('#download').prop('disabled', 'disabled');
-  $('#close-tabs').show();
+  $('#download').prop('disabled', true);
+  $('#close-tabs').prop('disabled', true).show();
 
   getTabsWithImages(function(tabs) {
+    for (var i = 0; i < tabs.length; i++) {
+      var tabId = tabs[i].id;
+      tabDownloadStatuses[tabId] = null;
+    }
+
     for (var i = 0; i < tabs.length; i++) {
       (function() {
         var url = tabs[i].url;
@@ -64,11 +69,11 @@ function downloadImageUrls() {
             if (id) {
               // Download successful
               $('#links li a[href="' + url + '"]').parent().addClass('done');
-              tabDownloadStatuses[tabId] = true;
+              updateTabDownloadStatus(tabId, true);
             } else {
               // Download failed
               $('#links li a[href="' + url + '"]').parent().addClass('error');
-              tabDownloadStatuses[tabId] = false;
+              updateTabDownloadStatus(tabId, false);
             }
           }
         );
@@ -91,6 +96,26 @@ function closeDownloadedTabs() {
     }
   }
   chrome.tabs.remove(tabIds);
+  closePopup();
+}
+
+function updateTabDownloadStatus(tabId, success) {
+  tabDownloadStatuses[tabId] = success;
+
+  var allDownloaded = true;
+  for (var id in tabDownloadStatuses) {
+    if (tabDownloadStatuses.hasOwnProperty(id)) {
+      if (tabDownloadStatuses[id] !== true) {
+        allDownloaded = false;
+        break;
+      }
+    }
+  }
+
+  // Show close downloaded button when all images are downloaded successfully
+  if (allDownloaded) {
+    $('#close-tabs').prop('disabled', false);
+  }
 }
 
 // TODO currently unused

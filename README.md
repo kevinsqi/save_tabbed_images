@@ -21,6 +21,7 @@ High priority:
 
 * Button to close SUCCESSFULLY downloaded tabs immediately after downloading
 * Handle download failures - add "retry failed" button
+  * Add way to systematically trigger failures
 * Fix issue where not all images are queued for download?
 * Use chrome.downloads.download saveAs parameter for file prompt? (how to manage for multiple downloads?)
 
@@ -40,7 +41,9 @@ Medium priority:
 Low priority or unconfirmed:
 
 * Add javascript tests
-* Switch to using handlebars templating?
+* Refactoring
+  * Switch to using handlebars templating?
+  * Use underscore.js
 * Make icon colored if there are images available, grey otherwise
 
 * Better feedback after clicking "download" - say where the files are downloaded to (i.e. chrome.downloads.showDefaultFolder())
