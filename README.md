@@ -22,6 +22,7 @@ High priority:
 * Button to close SUCCESSFULLY downloaded tabs immediately after downloading
 * Handle download failures - add "retry failed" button
   * Add way to systematically trigger failures
+    * Happens for gmail attachments - reports "done" instead of failure, server not found?
 * Fix issue where not all images are queued for download?
 * Use chrome.downloads.download saveAs parameter for file prompt? (how to manage for multiple downloads?)
 
