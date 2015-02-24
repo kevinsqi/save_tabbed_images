@@ -36,8 +36,8 @@ function showImageUrls() {
     // Customize controls
     var message = $('#message');
     if (tabs.length > 0) {
-      message.text(pluralize(tabs.length, "image") + " in current window:");
       $('#download').text('Download ' + pluralize(tabs.length, "image"));
+      message.text("Image list:");
     } else {
       // No images are loaded
       message.text("No images opened as tabs in current window.");
@@ -50,6 +50,7 @@ function showImageUrls() {
 function downloadImageUrls() {
   $('#download').prop('disabled', true);
   $('#close-tabs').prop('disabled', true).show();
+
 
   getTabsWithImages(function(tabs) {
     for (var i = 0; i < tabs.length; i++) {
@@ -118,23 +119,16 @@ function updateTabDownloadStatus(tabId, success) {
   }
 }
 
-// TODO currently unused
-function timestampedFolderName() {
-  moment().format('YYYY-MM-DD') + "/"
-}
-
 // TODO domready?
 window.onload = function() {
-  /* TODO - WIP custom subdirectories in Downloads folder
+  var folderName = "SaveTabbedImages_" + moment().format('YYYY-MM-DD');
 
   chrome.downloads.onDeterminingFilename.addListener(function(downloadItem, suggest) {
-    // TODO add "foldername/" before downloadItem.filename to add subdirectory.
-    // but it doesn't guarantee batching all downloads correctly.
+    // Note that this will create separate folders if the downloads cross over different days
     suggest({
-      filename: downloadItem.filename,
+      filename: folderName + "/" + downloadItem.filename
     });
   });
-  */
 
   showImageUrls();
 
