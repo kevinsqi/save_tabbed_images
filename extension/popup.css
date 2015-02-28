@@ -109,6 +109,7 @@ button:hover {
 #download-options {
   background: #f6f6f6;
   padding: 1em;
+  margin-bottom: 1em;
 }
 #download-options li {
   overflow: hidden;
