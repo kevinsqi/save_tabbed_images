@@ -6,6 +6,8 @@
     <script src="popup.js"></script>
   </head>
   <body>
+    <button id="download"></button>
+
     <form id="download-options">
       <ul>
         <li>
@@ -13,19 +15,16 @@
           <label for="path-option-default">Default download location</label>
         </li>
         <li>
-          <label>
-            <input id="path-option-custom" type="radio" name="path-option" value="custom" />
-            <label for="path-option-custom">Custom subfolder</label>
+          <input id="path-option-custom" type="radio" name="path-option" value="custom" />
 
-            <div class="path-wrapper">
-              <input type="text" name="path" id="path" disabled />
-            </div>
-          </label>
+          <div class="path-wrapper">
+            <label for="path-option-custom">Custom subfolder</label>
+            <input type="text" name="path" id="path" disabled />
+          </div>
         </li>
       </ul>
     </form>
 
-    <button id="download"></button>
     <p id="message"></p>
     <ul id="links"></ul>
     <button id="close-tabs">Close Downloaded Tabs</button>

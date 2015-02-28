@@ -1,6 +1,10 @@
+* {
+  box-sizing: border-box;
+  color: #888;
+}
 body {
   padding: 1em;
-  width: 16em;
+  width: 20em;
 
   font-family: Arial, sans-serif;
   font-size: 14px;
@@ -17,6 +21,20 @@ ul {
 }
 a {
   text-decoration: none;
+}
+ul {
+  margin: 0;
+}
+p {
+  margin: 0;
+  margin-bottom: 0.5em;
+}
+input[type="radio"] {
+  margin: 0;
+  margin-top: 3px;
+}
+input[type="text"] {
+  padding: 5px 7px;
 }
 #links {
   font-size: 0.8em;
@@ -59,7 +77,7 @@ button {
   color: #fff;
   border: none;
   outline: none;
-  border-radius: 4px;
+  border-radius: 5px;
   padding: 1em 0.5em;
   font-size: 1.1em;
   cursor: pointer;
@@ -72,13 +90,41 @@ button:hover {
 }
 #download {
   background: #43a0de;
+  border-radius: 5px 5px 0 0;
 }
 #download:hover {
   background: #175681;
 }
 #dismiss {
   display: none;
+  margin-top: 1em;
 }
 #close-tabs {
   display: none;
+  margin-top: 1em;
+}
+#message {
+  font-weight: bold;
+}
+#download-options {
+  background: #f6f6f6;
+  padding: 1em;
+}
+#download-options li {
+  overflow: hidden;
+  padding: 2px 0;
+}
+#download-options input[type="radio"] {
+  width: 25px;
+  float: left;
+}
+.path-wrapper {
+  overflow: hidden;
+}
+.path-wrapper input {
+  width: 100%;
+  margin-top: 5px;
+}
+.path-wrapper input:disabled {
+  opacity: 0.3;
 }

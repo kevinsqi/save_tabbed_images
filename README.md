@@ -38,6 +38,7 @@ Medium priority:
 	* Add option to "close downloaded tabs" after download
 	* Option to only download from current window (default), or all windows?
 
+* Nice CSS checkboxes: http://ux.mailchimp.com/patterns/forms
 
 Low priority or unconfirmed:
 

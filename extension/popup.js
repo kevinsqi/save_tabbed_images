@@ -66,7 +66,7 @@ function showImageUrls() {
     var message = $('#message');
     if (tabs.length > 0) {
       $('#download').text('Download ' + pluralize(tabs.length, "image"));
-      message.text("Image list:");
+      message.text('Images to download');
     } else {
       // No images are loaded
       message.text("No images opened as tabs in current window.");
@@ -158,6 +158,7 @@ function updateTabDownloadStatus(tabId, success) {
 }
 
 window.onload = function() {
+  // TODO move this to function, why the eff doesn't it work
   var folderName = "SaveTabbedImages-" + moment().format('YYYY-MM-DD');
   $('#path').val(folderName);
 
