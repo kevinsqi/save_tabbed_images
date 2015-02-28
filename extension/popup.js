@@ -51,7 +51,6 @@ function downloadImageUrls() {
   $('#download').prop('disabled', true);
   $('#close-tabs').prop('disabled', true).show();
 
-
   getTabsWithImages(function(tabs) {
     for (var i = 0; i < tabs.length; i++) {
       var tabId = tabs[i].id;
@@ -121,7 +120,9 @@ function updateTabDownloadStatus(tabId, success) {
 
 // TODO domready?
 window.onload = function() {
-  var folderName = "SaveTabbedImages_" + moment().format('YYYY-MM-DD');
+  var folderName = "SaveTabbedImages-" + moment().format('YYYY-MM-DD');
+
+  $('#path').val(folderName);
 
   chrome.downloads.onDeterminingFilename.addListener(function(downloadItem, suggest) {
     // Note that this will create separate folders if the downloads cross over different days

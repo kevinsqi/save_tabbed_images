@@ -2,24 +2,22 @@
   <head>
     <link rel="stylesheet" href="popup.css">
     <script src="jquery-2.1.1.min.js"></script>
-    <script src="handlebars-v3.0.0.js"></script>
     <script src="moment.js"></script>
     <script src="popup.js"></script>
   </head>
   <body>
     <ul>
       <li>
-        <input id="path-default" type="radio" name="path" value="default" checked />
-        <label for="path-default">Default download location</label>
+        <input id="path-option-default" type="radio" name="path-option" value="default" checked />
+        <label for="path-option-default">Default download location</label>
       </li>
       <li>
         <label>
-          <input id="path-custom" type="radio" name="path" value="custom" />
-          <label for="path-custom">Custom subfolder</label>
+          <input id="path-option-custom" type="radio" name="path-option" value="custom" />
+          <label for="path-option-custom">Custom subfolder</label>
 
-          <div>
-            <label for="folder-input">Default download location/</label>
-            <input type="text" id="folder-input" />
+          <div class="path-wrapper">
+            <input type="text" name="path" id="path" />
           </div>
         </label>
       </li>
