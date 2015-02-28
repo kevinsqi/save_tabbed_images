@@ -9,6 +9,35 @@ function pluralize(count, str) {
   }
 }
 
+// http://stackoverflow.com/a/5199982/341512
+jQuery.fn.serializeObject = function() {
+  var arrayData, objectData;
+  arrayData = this.serializeArray();
+  objectData = {};
+
+  $.each(arrayData, function() {
+    var value;
+
+    if (this.value != null) {
+      value = this.value;
+    } else {
+      value = '';
+    }
+
+    if (objectData[this.name] != null) {
+      if (!objectData[this.name].push) {
+        objectData[this.name] = [objectData[this.name]];
+      }
+
+      objectData[this.name].push(value);
+    } else {
+      objectData[this.name] = value;
+    }
+  });
+
+  return objectData;
+};
+
 function getTabsWithImages(callback) {
   chrome.tabs.query(
     {currentWindow: true},
@@ -42,6 +71,7 @@ function showImageUrls() {
       // No images are loaded
       message.text("No images opened as tabs in current window.");
       $('#download').hide();
+      $('#download-options').hide();
       $('#dismiss').show();
     }
   });
@@ -82,6 +112,15 @@ function downloadImageUrls() {
   });
 }
 
+function getDownloadPath() {
+  var path = $('#download-options').serializeObject()['path'];
+  if (path && path.length > 0) {
+    return path + "/";
+  } else {
+    return "";
+  }
+}
+
 function closePopup() {
   window.close();
 }
@@ -118,21 +157,22 @@ function updateTabDownloadStatus(tabId, success) {
   }
 }
 
-// TODO domready?
 window.onload = function() {
   var folderName = "SaveTabbedImages-" + moment().format('YYYY-MM-DD');
-
   $('#path').val(folderName);
 
   chrome.downloads.onDeterminingFilename.addListener(function(downloadItem, suggest) {
-    // Note that this will create separate folders if the downloads cross over different days
     suggest({
-      filename: folderName + "/" + downloadItem.filename
+      filename: getDownloadPath() + downloadItem.filename
     });
   });
 
   showImageUrls();
 
+  $('#download-options input:radio').change(function() {
+    var disableCustomPath = $('#download-options').serializeObject()['path-option'] !== 'custom';
+    $('#path').prop('disabled', disableCustomPath);
+  });
   $('#download').click(downloadImageUrls);
   $('#dismiss').click(closePopup);
   $('#close-tabs').click(closeDownloadedTabs);
