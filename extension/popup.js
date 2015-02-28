@@ -9,6 +9,35 @@ function pluralize(count, str) {
   }
 }
 
+// http://stackoverflow.com/a/5199982/341512
+jQuery.fn.serializeObject = function() {
+  var arrayData, objectData;
+  arrayData = this.serializeArray();
+  objectData = {};
+
+  $.each(arrayData, function() {
+    var value;
+
+    if (this.value != null) {
+      value = this.value;
+    } else {
+      value = '';
+    }
+
+    if (objectData[this.name] != null) {
+      if (!objectData[this.name].push) {
+        objectData[this.name] = [objectData[this.name]];
+      }
+
+      objectData[this.name].push(value);
+    } else {
+      objectData[this.name] = value;
+    }
+  });
+
+  return objectData;
+};
+
 function getTabsWithImages(callback) {
   chrome.tabs.query(
     {currentWindow: true},
@@ -36,12 +65,13 @@ function showImageUrls() {
     // Customize controls
     var message = $('#message');
     if (tabs.length > 0) {
-      message.text(pluralize(tabs.length, "image") + " in current window:");
       $('#download').text('Download ' + pluralize(tabs.length, "image"));
+      message.text('Images to download');
     } else {
       // No images are loaded
       message.text("No images opened as tabs in current window.");
       $('#download').hide();
+      $('#download-options').hide();
       $('#dismiss').show();
     }
   });
@@ -82,6 +112,15 @@ function downloadImageUrls() {
   });
 }
 
+function getDownloadPath() {
+  var path = $('#download-options').serializeObject()['path'];
+  if (path && path.length > 0) {
+    return path + "/";
+  } else {
+    return "";
+  }
+}
+
 function closePopup() {
   window.close();
 }
@@ -118,26 +157,23 @@ function updateTabDownloadStatus(tabId, success) {
   }
 }
 
-// TODO currently unused
-function timestampedFolderName() {
-  moment().format('YYYY-MM-DD') + "/"
-}
-
-// TODO domready?
 window.onload = function() {
-  /* TODO - WIP custom subdirectories in Downloads folder
+  // TODO move this to function, why the eff doesn't it work
+  var folderName = "SaveTabbedImages-" + moment().format('YYYY-MM-DD');
+  $('#path').val(folderName);
 
   chrome.downloads.onDeterminingFilename.addListener(function(downloadItem, suggest) {
-    // TODO add "foldername/" before downloadItem.filename to add subdirectory.
-    // but it doesn't guarantee batching all downloads correctly.
     suggest({
-      filename: downloadItem.filename,
+      filename: getDownloadPath() + downloadItem.filename
     });
   });
-  */
 
   showImageUrls();
 
+  $('#download-options input:radio').change(function() {
+    var disableCustomPath = $('#download-options').serializeObject()['path-option'] !== 'custom';
+    $('#path').prop('disabled', disableCustomPath);
+  });
   $('#download').click(downloadImageUrls);
   $('#dismiss').click(closePopup);
   $('#close-tabs').click(closeDownloadedTabs);
