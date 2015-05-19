@@ -8,6 +8,7 @@ Download all images opened as tabs in one easy click.
 
 High priority:
 
+* When you fill in a subdirectory, make "enter" submit the form 
 * Handle invalid path characters (e.g. windows \ / : * ? " < > |), gsub with ''?
   * Test on linux
 * Button to close SUCCESSFULLY downloaded tabs immediately after downloading
