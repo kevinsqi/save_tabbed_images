@@ -1,3 +1,6 @@
+// Reference on detecting MIME type:
+// http://stackoverflow.com/a/21042958/341512
+
 var tabsWithImages = {};
 
 var imageMimeTypes = {
