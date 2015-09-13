@@ -1,9 +1,11 @@
 {
   "dependencies": {
-    "react"
+    "jquery": "2.1.x",
+    "moment": "2.10.x",
+    "react":  "0.13.x"
   },
   "devDependencies": {
-    "browserify",
-    "reactify"
+    "browserify": "11.1.x",
+    "reactify": "1.1.x"
   }
 }

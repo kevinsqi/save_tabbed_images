@@ -1,6 +1,34 @@
 var React = require('react');
 
 module.exports = React.createClass({
+  getInitialState: function() {
+    return {
+      imageList: []
+    };
+  },
+  getTabsWithImages: function(callback) {
+    chrome.tabs.query(
+      {currentWindow: true},
+      function(tabs) {
+        // Query background process for which tabs are images
+        chrome.runtime.sendMessage({type: "checktabs", tabs: tabs}, function(response) {
+          callback(response.tabs);
+        });
+      }
+    );
+  },
+  componentDidMount: function() {
+    this.getTabsWithImages(function(tabs) {
+      this.setState({imageList: tabs});
+    });
+  },
+  imageList: function() {
+    return (
+      <ul>
+        <li>One</li>
+      </ul>
+    );
+  },
   render: function() {
     return (
       <div className="save-image-dialog">
@@ -24,6 +52,8 @@ module.exports = React.createClass({
         </form>
 
         <p id="message"></p>
+
+        {this.imageList()}
         <ul id="links"></ul>
         <button id="close-tabs">Close Downloaded Tabs</button>
         <button id="dismiss">Close</button>

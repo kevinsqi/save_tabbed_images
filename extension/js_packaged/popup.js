@@ -8,6 +8,34 @@ React.render(React.createElement(SaveImageDialog, null), document.getElementById
 var React = require('react');
 
 module.exports = React.createClass({displayName: "exports",
+  getInitialState: function() {
+    return {
+      imageList: []
+    };
+  },
+  getTabsWithImages: function(callback) {
+    chrome.tabs.query(
+      {currentWindow: true},
+      function(tabs) {
+        // Query background process for which tabs are images
+        chrome.runtime.sendMessage({type: "checktabs", tabs: tabs}, function(response) {
+          callback(response.tabs);
+        });
+      }
+    );
+  },
+  componentDidMount: function() {
+    this.getTabsWithImages(function(tabs) {
+      this.setState({imageList: tabs});
+    });
+  },
+  imageList: function() {
+    return (
+      React.createElement("ul", null, 
+        React.createElement("li", null, "One")
+      )
+    );
+  },
   render: function() {
     return (
       React.createElement("div", {className: "save-image-dialog"}, 
@@ -17,13 +45,13 @@ module.exports = React.createClass({displayName: "exports",
           React.createElement("ul", null, 
             React.createElement("li", null, 
               React.createElement("input", {id: "path-option-default", type: "radio", name: "path-option", value: "default", checked: true}), 
-              React.createElement("label", {for: "path-option-default"}, "Default download location")
+              React.createElement("label", {htmlFor: "path-option-default"}, "Default download location")
             ), 
             React.createElement("li", null, 
               React.createElement("input", {id: "path-option-custom", type: "radio", name: "path-option", value: "custom"}), 
 
-              React.createElement("div", {class: "path-wrapper"}, 
-                React.createElement("label", {for: "path-option-custom"}, "Subfolder within default location"), 
+              React.createElement("div", {className: "path-wrapper"}, 
+                React.createElement("label", {htmlFor: "path-option-custom"}, "Subfolder within default location"), 
                 React.createElement("input", {type: "text", name: "path", id: "path", disabled: true})
               )
             )
@@ -31,6 +59,8 @@ module.exports = React.createClass({displayName: "exports",
         ), 
 
         React.createElement("p", {id: "message"}), 
+
+        this.imageList(), 
         React.createElement("ul", {id: "links"}), 
         React.createElement("button", {id: "close-tabs"}, "Close Downloaded Tabs"), 
         React.createElement("button", {id: "dismiss"}, "Close")
