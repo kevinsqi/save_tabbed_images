@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "react"
+  },
+  "devDependencies": {
+    "browserify",
+    "reactify"
+  }
+}

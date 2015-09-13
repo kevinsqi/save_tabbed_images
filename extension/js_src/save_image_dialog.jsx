@@ -10,13 +10,13 @@ module.exports = React.createClass({
           <ul>
             <li>
               <input id="path-option-default" type="radio" name="path-option" value="default" checked />
-              <label for="path-option-default">Default download location</label>
+              <label htmlFor="path-option-default">Default download location</label>
             </li>
             <li>
               <input id="path-option-custom" type="radio" name="path-option" value="custom" />
 
-              <div class="path-wrapper">
-                <label for="path-option-custom">Subfolder within default location</label>
+              <div className="path-wrapper">
+                <label htmlFor="path-option-custom">Subfolder within default location</label>
                 <input type="text" name="path" id="path" disabled />
               </div>
             </li>
