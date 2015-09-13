@@ -1,7 +1,7 @@
 {
   "name": "Save Tabbed Images",
   "description": "Save images currently opened in tabs.",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "minimum_chrome_version": "16.0.884",
   "manifest_version": 2,
   "permissions": [
