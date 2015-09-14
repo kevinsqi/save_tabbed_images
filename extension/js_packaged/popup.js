@@ -10,7 +10,7 @@ var React = require('react');
 module.exports = React.createClass({displayName: "exports",
   getInitialState: function() {
     return {
-      imageList: []
+      imageTabList: []
     };
   },
   getTabsWithImages: function(callback) {
@@ -26,13 +26,16 @@ module.exports = React.createClass({displayName: "exports",
   },
   componentDidMount: function() {
     this.getTabsWithImages(function(tabs) {
-      this.setState({imageList: tabs});
-    });
+      this.setState({imageTabList: tabs});
+    }.bind(this));
   },
-  imageList: function() {
+  imageTabListItem: function(imageTab) {
+    return React.createElement("li", null, React.createElement("a", {href: imageTab.url}, imageTab.url));
+  },
+  imageTabList: function() {
     return (
       React.createElement("ul", null, 
-        React.createElement("li", null, "One")
+        this.state.imageTabList.map(this.imageTabListItem)
       )
     );
   },
@@ -60,7 +63,7 @@ module.exports = React.createClass({displayName: "exports",
 
         React.createElement("p", {id: "message"}), 
 
-        this.imageList(), 
+        this.imageTabList(), 
         React.createElement("ul", {id: "links"}), 
         React.createElement("button", {id: "close-tabs"}, "Close Downloaded Tabs"), 
         React.createElement("button", {id: "dismiss"}, "Close")
