@@ -82,6 +82,9 @@ button {
   font-size: 1.1em;
   cursor: pointer;
 }
+button span {
+  color: #fff;
+}
 button:disabled {
   opacity: 0.3;
 }

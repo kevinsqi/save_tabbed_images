@@ -1,4 +1,5 @@
 var React = require('react');
+var pluralize = require('pluralize');
 
 module.exports = React.createClass({
   getInitialState: function() {
@@ -24,59 +25,59 @@ module.exports = React.createClass({
     }.bind(this));
   },
   hasImages: function() {
-    return this.state.imageTabList.length > 0;
+    return this.imageCount() > 0;
   },
   imageTabListItem: function(imageTab) {
     return <li><a href={imageTab.url}>{imageTab.url}</a></li>;
   },
-  imageTabList: function() {
+  imageCount: function() {
+    console.log(this.state.imageTabList);
+    return this.state.imageTabList.length;
+  },
+  downloadOptions: function() {
     return (
-      <ul id="links">
-        {this.state.imageTabList.map(this.imageTabListItem)}
-      </ul>
+      <form id="download-options">
+        <ul>
+          <li>
+            <input id="path-option-default" type="radio" name="path-option" value="default" checked />
+            <label htmlFor="path-option-default">Default download location</label>
+          </li>
+          <li>
+            <input id="path-option-custom" type="radio" name="path-option" value="custom" />
+
+            <div className="path-wrapper">
+              <label htmlFor="path-option-custom">Subfolder within default location</label>
+              <input type="text" name="path" id="path" disabled />
+            </div>
+          </li>
+        </ul>
+      </form>
     );
   },
-  closeTabsButton: function() {
-    if (this.state.isComplete) {
-      return <button id="close-tabs">Close Downloaded Tabs</button>;
-    } else {
-      return null;
-    }
-  },
-  dismissButton: function() {
-    if (this.hasImages()) {
-      return null;
-    } else {
-      return <button id="dismiss">Close</button>;
-    }
-  },
   render: function() {
+    var content;
+    if (this.hasImages()) {
+      content = (
+        <div>
+          <button id="download">Download {pluralize('image', this.imageCount(), true)}</button>
+          {this.downloadOptions()}
+          <ul id="links">
+            {this.state.imageTabList.map(this.imageTabListItem)}
+          </ul>
+          {this.state.isComplete ? <button id="close-tabs">Close Downloaded Tabs</button> : null}
+        </div>
+      );
+    } else {
+      content = (
+        <div>
+          <p id="message">No images opened as tabs in current window.</p>
+          <button id="dismiss">Close</button>
+        </div>
+      );
+    }
     return (
       <div className="save-image-dialog">
-        <button id="download"></button>
-
-        <form id="download-options">
-          <ul>
-            <li>
-              <input id="path-option-default" type="radio" name="path-option" value="default" checked />
-              <label htmlFor="path-option-default">Default download location</label>
-            </li>
-            <li>
-              <input id="path-option-custom" type="radio" name="path-option" value="custom" />
-
-              <div className="path-wrapper">
-                <label htmlFor="path-option-custom">Subfolder within default location</label>
-                <input type="text" name="path" id="path" disabled />
-              </div>
-            </li>
-          </ul>
-        </form>
-
-        <p id="message"></p>
-
-        {this.imageTabList()}
-        {this.closeTabsButton()}
-        {this.dismissButton()}
+        {content}
       </div>
     );
   }

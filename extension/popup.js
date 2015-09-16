@@ -1,14 +1,6 @@
 // Globals
 var tabDownloadStatuses = {};
 
-function pluralize(count, str) {
-  if (count === 1) {
-    return count + ' ' + str;
-  } else {
-    return count + ' ' + str + 's';
-  }
-}
-
 // http://stackoverflow.com/a/5199982/341512
 jQuery.fn.serializeObject = function() {
   var arrayData, objectData;

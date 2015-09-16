@@ -2,10 +2,12 @@
   "dependencies": {
     "jquery": "2.1.x",
     "moment": "2.10.x",
+    "pluralize": "1.2.x",
     "react":  "0.13.x"
   },
   "devDependencies": {
     "browserify": "11.1.x",
-    "reactify": "1.1.x"
+    "reactify": "1.1.x",
+    "watchify": "3.4.x"
   }
 }
