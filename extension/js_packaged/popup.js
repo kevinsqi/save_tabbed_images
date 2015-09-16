@@ -10,7 +10,8 @@ var React = require('react');
 module.exports = React.createClass({displayName: "exports",
   getInitialState: function() {
     return {
-      imageTabList: []
+      imageTabList: [],
+      isComplete: false
     };
   },
   getTabsWithImages: function(callback) {
@@ -29,15 +30,32 @@ module.exports = React.createClass({displayName: "exports",
       this.setState({imageTabList: tabs});
     }.bind(this));
   },
+  hasImages: function() {
+    return this.state.imageTabList.length > 0;
+  },
   imageTabListItem: function(imageTab) {
     return React.createElement("li", null, React.createElement("a", {href: imageTab.url}, imageTab.url));
   },
   imageTabList: function() {
     return (
-      React.createElement("ul", null, 
+      React.createElement("ul", {id: "links"}, 
         this.state.imageTabList.map(this.imageTabListItem)
       )
     );
+  },
+  closeTabsButton: function() {
+    if (this.state.isComplete) {
+      return React.createElement("button", {id: "close-tabs"}, "Close Downloaded Tabs");
+    } else {
+      return null;
+    }
+  },
+  dismissButton: function() {
+    if (this.hasImages()) {
+      return null;
+    } else {
+      return React.createElement("button", {id: "dismiss"}, "Close");
+    }
   },
   render: function() {
     return (
@@ -64,9 +82,8 @@ module.exports = React.createClass({displayName: "exports",
         React.createElement("p", {id: "message"}), 
 
         this.imageTabList(), 
-        React.createElement("ul", {id: "links"}), 
-        React.createElement("button", {id: "close-tabs"}, "Close Downloaded Tabs"), 
-        React.createElement("button", {id: "dismiss"}, "Close")
+        this.closeTabsButton(), 
+        this.dismissButton()
       )
     );
   }

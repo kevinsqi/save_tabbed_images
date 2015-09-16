@@ -3,7 +3,8 @@ var React = require('react');
 module.exports = React.createClass({
   getInitialState: function() {
     return {
-      imageTabList: []
+      imageTabList: [],
+      isComplete: false
     };
   },
   getTabsWithImages: function(callback) {
@@ -22,15 +23,32 @@ module.exports = React.createClass({
       this.setState({imageTabList: tabs});
     }.bind(this));
   },
+  hasImages: function() {
+    return this.state.imageTabList.length > 0;
+  },
   imageTabListItem: function(imageTab) {
     return <li><a href={imageTab.url}>{imageTab.url}</a></li>;
   },
   imageTabList: function() {
     return (
-      <ul>
+      <ul id="links">
         {this.state.imageTabList.map(this.imageTabListItem)}
       </ul>
     );
+  },
+  closeTabsButton: function() {
+    if (this.state.isComplete) {
+      return <button id="close-tabs">Close Downloaded Tabs</button>;
+    } else {
+      return null;
+    }
+  },
+  dismissButton: function() {
+    if (this.hasImages()) {
+      return null;
+    } else {
+      return <button id="dismiss">Close</button>;
+    }
   },
   render: function() {
     return (
@@ -57,9 +75,8 @@ module.exports = React.createClass({
         <p id="message"></p>
 
         {this.imageTabList()}
-        <ul id="links"></ul>
-        <button id="close-tabs">Close Downloaded Tabs</button>
-        <button id="dismiss">Close</button>
+        {this.closeTabsButton()}
+        {this.dismissButton()}
       </div>
     );
   }

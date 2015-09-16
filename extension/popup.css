@@ -96,11 +96,9 @@ button:hover {
   background: #175681;
 }
 #dismiss {
-  display: none;
   margin-top: 1em;
 }
 #close-tabs {
-  display: none;
   margin-top: 1em;
 }
 #message {
