@@ -1,3 +1,5 @@
+extension/js_packaged
+
 node_modules
 
 *.DS_Store
