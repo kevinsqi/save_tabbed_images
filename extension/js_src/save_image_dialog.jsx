@@ -5,7 +5,8 @@ module.exports = React.createClass({
   getInitialState: function() {
     return {
       imageTabList: [],
-      isComplete: false
+      isComplete: false,
+      isDownloading: false
     };
   },
   getTabsWithImages: function(callback) {
@@ -23,6 +24,26 @@ module.exports = React.createClass({
     this.getTabsWithImages(function(tabs) {
       this.setState({imageTabList: tabs});
     }.bind(this));
+  },
+  downloadImages: function() {
+    this.setState({isDownloading: true});
+    this.getTabsWithImages(function(tabs) {
+      tabs.forEach(function(tab) {
+        chrome.downloads.download(
+          {
+            url: tab.url,
+            conflictAction: "uniquify"
+          },
+          function(id) {
+            if (id) {
+              // Download successful
+            } else {
+              // Download failed
+            }
+          }
+        );
+      }.bind(this));
+    });
   },
   hasImages: function() {
     return this.imageCount() > 0;
@@ -59,7 +80,9 @@ module.exports = React.createClass({
     if (this.hasImages()) {
       content = (
         <div>
-          <button id="download">Download {pluralize('image', this.imageCount(), true)}</button>
+          <button id="download" disabled={this.state.isDownloading} onClick={this.downloadImages}>
+            Download {pluralize('image', this.imageCount(), true)}
+          </button>
           {this.downloadOptions()}
           <ul id="links">
             {this.state.imageTabList.map(this.imageTabListItem)}
