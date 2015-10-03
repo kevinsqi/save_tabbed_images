@@ -1,10 +1,12 @@
 var React = require('react');
 var pluralize = require('pluralize');
+var _ = require('underscore');
 
 module.exports = React.createClass({
   getInitialState: function() {
     return {
       imageTabList: [],
+      imageDownloadStatuses: {},
       isComplete: false,
       isDownloading: false
     };
@@ -25,31 +27,44 @@ module.exports = React.createClass({
       this.setState({imageTabList: tabs});
     }.bind(this));
   },
+  isDownloading: function() {
+    return _.any(_.values(imageDownloadStatuses), 'pending');
+  },
   downloadImages: function() {
     this.setState({isDownloading: true});
     this.getTabsWithImages(function(tabs) {
+      this.setState({
+        imageDownloadStatuses: _.reduce(tabs, function(memo, tab) {
+          return memo[tab.id] = 'pending';
+        }, {})
+      });
       tabs.forEach(function(tab) {
         chrome.downloads.download(
           {
             url: tab.url,
-            conflictAction: "uniquify"
+            conflictAction: 'uniquify'
           },
           function(id) {
             if (id) {
               // Download successful
+              var newStatuses = this.state.imageDownloadStatuses;
+              newStatuses[tab.id] = 'complete';
+              this.setState({
+                imageDownloadStatuses: newStatuses
+              });
             } else {
               // Download failed
             }
-          }
+          }.bind(this)
         );
       }.bind(this));
-    });
+    }.bind(this));
   },
   hasImages: function() {
     return this.imageCount() > 0;
   },
   imageTabListItem: function(imageTab) {
-    return <li><a href={imageTab.url}>{imageTab.url}</a></li>;
+    return <li className={this.state.imageDownloadStatuses[imageTab.id]}><a href={imageTab.url}>{imageTab.url}</a></li>;
   },
   imageCount: function() {
     console.log(this.state.imageTabList);

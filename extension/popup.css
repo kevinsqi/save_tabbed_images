@@ -49,13 +49,13 @@ input[type="text"] {
 #links li a {
   color: #aaa;
 }
-#links li.done a {
+#links li.complete a {
   color: #999;
 }
 #links li.error a {
   color: #f66;
 }
-#links li.done a:before {
+#links li.complete a:before {
   content: "Done";
   background: #43a0de;
   color: #fff;

@@ -3,7 +3,8 @@
     "jquery": "2.1.x",
     "moment": "2.10.x",
     "pluralize": "1.2.x",
-    "react":  "0.13.x"
+    "react": "0.13.x",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "browserify": "11.1.x",
