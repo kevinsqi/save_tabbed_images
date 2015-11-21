@@ -5,6 +5,7 @@
 body {
   padding: 1em;
   width: 20em;
+  min-height: 15em;  /* TODO temporary workaround, fix clipping issue */
 
   font-family: Arial, sans-serif;
   font-size: 14px;
