@@ -9,8 +9,8 @@ var COMPLETE = 'complete';
 var SaveImageDialog = React.createClass({
   getInitialState: function() {
     return {
-      imageTabList: [],
-      imageDownloadStatuses: {},
+      tabList: [],
+      downloadStatuses: {},
       customDownloadLocation: false,
       customDownloadLocationPath: "SaveTabbedImages-" + moment().format('YYYY-MM-DD')
     };
@@ -27,7 +27,7 @@ var SaveImageDialog = React.createClass({
     );
   },
   getCompletedTabs: function() {
-    return _.compact(_.map(this.state.imageDownloadStatuses, function(status, tabID) {
+    return _.compact(_.map(this.state.downloadStatuses, function(status, tabID) {
       return (status === COMPLETE) ? parseInt(tabID, 10) : null;
     }));
   },
@@ -42,7 +42,7 @@ var SaveImageDialog = React.createClass({
   componentDidMount: function() {
     // get image list
     this.getTabsWithImages(function(tabs) {
-      this.setState({imageTabList: tabs});
+      this.setState({ tabList: tabs });
     }.bind(this));
 
     // set download location
@@ -54,14 +54,14 @@ var SaveImageDialog = React.createClass({
   },
   isDownloading: function() {
     return _.any(
-      _.values(this.state.imageDownloadStatuses),
+      _.values(this.state.downloadStatuses),
       function(status) { return status === PENDING; }
     );
   },
   isComplete: function() {
-    return _.size(this.state.imageDownloadStatuses) > 0 &&
+    return _.size(this.state.downloadStatuses) > 0 &&
       _.all(
-        _.values(this.state.imageDownloadStatuses),
+        _.values(this.state.downloadStatuses),
         function(status) { return status === COMPLETE; }
       );
   },
@@ -72,7 +72,7 @@ var SaveImageDialog = React.createClass({
         return memo;
       }, {});
       this.setState({
-        imageDownloadStatuses: statuses
+        downloadStatuses: statuses
       });
 
       tabs.forEach(function(tab) {
@@ -84,10 +84,10 @@ var SaveImageDialog = React.createClass({
           function(id) {
             if (id) {
               // Download successful
-              var newStatuses = _({}).extend(this.state.imageDownloadStatuses);
+              var newStatuses = _({}).extend(this.state.downloadStatuses);
               newStatuses[tab.id] = COMPLETE;
               this.setState({
-                imageDownloadStatuses: newStatuses
+                downloadStatuses: newStatuses
               });
             } else {
               // Download failed
@@ -100,15 +100,15 @@ var SaveImageDialog = React.createClass({
   hasImages: function() {
     return this.imageCount() > 0;
   },
-  imageTabListItem: function(tab) {
+  renderTabListItem: function(tab) {
     return (
-      <li key={tab.id} className={this.state.imageDownloadStatuses[tab.id]}>
+      <li key={tab.id} className={this.state.downloadStatuses[tab.id]}>
         <a href={tab.url}>{tab.url}</a>
       </li>
     );
   },
   imageCount: function() {
-    return this.state.imageTabList.length;
+    return this.state.tabList.length;
   },
   renderDownloadOptions: function() {
     return (
@@ -178,7 +178,7 @@ var SaveImageDialog = React.createClass({
           </button>
           {this.renderDownloadOptions()}
           <ul id="links">
-            {this.state.imageTabList.map(this.imageTabListItem)}
+            {this.state.tabList.map(this.renderTabListItem)}
           </ul>
           {this.isComplete() ? <button id="close-tabs" onClick={this.onClickCloseDownloadedTabs}>Close Downloaded Tabs</button> : null}
         </div>
