@@ -1,3 +1,0 @@
-describe("Popup", function() {
-  // TODO
-});
