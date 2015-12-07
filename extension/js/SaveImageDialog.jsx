@@ -11,8 +11,8 @@ var SaveImageDialog = React.createClass({
     return {
       tabList: [],
       downloadStatuses: {},
-      customDownloadLocation: false,
-      customDownloadLocationPath: "SaveTabbedImages-" + moment().format('YYYY-MM-DD')
+      useCustomDownloadLocation: false,
+      customDownloadLocation: "SaveTabbedImages-" + moment().format('YYYY-MM-DD')
     };
   },
   getTabsWithImages: function(callback) {
@@ -33,8 +33,8 @@ var SaveImageDialog = React.createClass({
   },
   getDownloadPath: function() {
     console.log('getDownloadPath', this.state);
-    if (this.state.customDownloadLocation) {
-      return this.state.customDownloadLocationPath + "/";
+    if (this.state.useCustomDownloadLocation) {
+      return this.state.customDownloadLocation + "/";
     } else {
       return "";
     }
@@ -119,7 +119,7 @@ var SaveImageDialog = React.createClass({
               id="path-option-default"
               type="radio"
               value="default"
-              checked={!this.state.customDownloadLocation} onChange={this.onChangeCustomDownloadLocation}
+              checked={!this.state.useCustomDownloadLocation} onChange={this.onChangeCustomDownloadLocation}
             />
             <label htmlFor="path-option-default">Default download location</label>
           </li>
@@ -128,15 +128,15 @@ var SaveImageDialog = React.createClass({
               id="path-option-custom"
               type="radio"
               value="custom"
-              checked={this.state.customDownloadLocation} onChange={this.onChangeCustomDownloadLocation}
+              checked={this.state.useCustomDownloadLocation} onChange={this.onChangeCustomDownloadLocation}
             />
             <div className="path-wrapper">
               <label htmlFor="path-option-custom">Subfolder within default location</label>
               <input
                 id="path"
                 type="text"
-                value={this.state.customDownloadLocationPath}
-                disabled={!this.state.customDownloadLocation}
+                value={this.state.customDownloadLocation}
+                disabled={!this.state.useCustomDownloadLocation}
                 onChange={this.onChangeCustomDownloadLocationPath}
               />
             </div>
@@ -158,14 +158,14 @@ var SaveImageDialog = React.createClass({
   },
   onChangeCustomDownloadLocation: function(event) {
     if (event.target.value === 'default') {
-      this.setState({ customDownloadLocation: false });
+      this.setState({ useCustomDownloadLocation: false });
     } else {
-      this.setState({ customDownloadLocation: true });
+      this.setState({ useCustomDownloadLocation: true });
     }
   },
   onChangeCustomDownloadLocationPath: function(event) {
     this.setState({
-      customDownloadLocationPath: event.target.value
+      customDownloadLocation: event.target.value
     });
   },
   render: function() {
