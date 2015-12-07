@@ -2,6 +2,9 @@ var React = require('react');
 var pluralize = require('pluralize');
 var _ = require('underscore');
 
+var PENDING = 'pending';
+var COMPLETE = 'complete';
+
 var SaveImageDialog = React.createClass({
   getInitialState: function() {
     return {
@@ -20,6 +23,11 @@ var SaveImageDialog = React.createClass({
       }
     );
   },
+  getCompletedTabs: function() {
+    return _.compact(_.map(this.state.imageDownloadStatuses, function(status, tabID) {
+      return (status === COMPLETE) ? parseInt(tabID, 10) : null;
+    }));
+  },
   componentDidMount: function() {
     this.getTabsWithImages(function(tabs) {
       this.setState({imageTabList: tabs});
@@ -28,20 +36,20 @@ var SaveImageDialog = React.createClass({
   isDownloading: function() {
     return _.any(
       _.values(this.state.imageDownloadStatuses),
-      function(value) { return value === 'pending'; }
+      function(status) { return status === PENDING; }
     );
   },
   isComplete: function() {
     return _.size(this.state.imageDownloadStatuses) > 0 &&
       _.all(
         _.values(this.state.imageDownloadStatuses),
-        function(value) { return value === 'complete'; }
+        function(status) { return status === COMPLETE; }
       );
   },
   downloadImages: function() {
     this.getTabsWithImages(function(tabs) {
       var statuses = _.reduce(tabs, function(memo, tab) {
-        memo[tab.id] = 'pending';
+        memo[tab.id] = PENDING;
         return memo;
       }, {});
       this.setState({
@@ -58,7 +66,7 @@ var SaveImageDialog = React.createClass({
             if (id) {
               // Download successful
               var newStatuses = _({}).extend(this.state.imageDownloadStatuses);
-              newStatuses[tab.id] = 'complete';
+              newStatuses[tab.id] = COMPLETE;
               this.setState({
                 imageDownloadStatuses: newStatuses
               });
@@ -73,8 +81,12 @@ var SaveImageDialog = React.createClass({
   hasImages: function() {
     return this.imageCount() > 0;
   },
-  imageTabListItem: function(imageTab) {
-    return <li className={this.state.imageDownloadStatuses[imageTab.id]}><a href={imageTab.url}>{imageTab.url}</a></li>;
+  imageTabListItem: function(tab) {
+    return (
+      <li key={tab.id} className={this.state.imageDownloadStatuses[tab.id]}>
+        <a href={tab.url}>{tab.url}</a>
+      </li>
+    );
   },
   imageCount: function() {
     return this.state.imageTabList.length;
@@ -99,6 +111,13 @@ var SaveImageDialog = React.createClass({
       </form>
     );
   },
+  onClickCloseDownloadedTabs: function() {
+    chrome.tabs.remove(this.getCompletedTabs());
+    this.onClickDismiss();
+  },
+  onClickDismiss: function() {
+    window.close();
+  },
   render: function() {
     var content;
     if (this.hasImages()) {
@@ -111,14 +130,14 @@ var SaveImageDialog = React.createClass({
           <ul id="links">
             {this.state.imageTabList.map(this.imageTabListItem)}
           </ul>
-          {this.isComplete() ? <button id="close-tabs">Close Downloaded Tabs</button> : null}
+          {this.isComplete() ? <button id="close-tabs" onClick={this.onClickCloseDownloadedTabs}>Close Downloaded Tabs</button> : null}
         </div>
       );
     } else {
       content = (
         <div>
           <p id="message">No images opened as tabs in current window.</p>
-          <button id="dismiss">Close</button>
+          <button id="dismiss" onClick={this.onClickDismiss}>Close</button>
         </div>
       );
     }
