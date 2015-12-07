@@ -5,6 +5,7 @@
 body {
   padding: 1em;
   width: 20em;
+  min-height: 15em;  /* TODO temporary workaround, fix clipping issue */
 
   font-family: Arial, sans-serif;
   font-size: 14px;
@@ -49,13 +50,13 @@ input[type="text"] {
 #links li a {
   color: #aaa;
 }
-#links li.done a {
+#links li.complete a {
   color: #999;
 }
 #links li.error a {
   color: #f66;
 }
-#links li.done a:before {
+#links li.complete a:before {
   content: "Done";
   background: #43a0de;
   color: #fff;
@@ -82,6 +83,9 @@ button {
   font-size: 1.1em;
   cursor: pointer;
 }
+button span {
+  color: #fff;
+}
 button:disabled {
   opacity: 0.3;
 }
@@ -96,15 +100,10 @@ button:hover {
   background: #175681;
 }
 #dismiss {
-  display: none;
   margin-top: 1em;
 }
 #close-tabs {
-  display: none;
   margin-top: 1em;
-}
-#message {
-  font-weight: bold;
 }
 #download-options {
   background: #f3f3f3;
