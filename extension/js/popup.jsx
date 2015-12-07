@@ -1,5 +1,4 @@
-// noreintegrate remove node_modules from chrome package (create /dist folder which is actual chrome package)
 var React = require('react');
-var SaveImageDialog = require('./save_image_dialog.jsx');
+var SaveImageDialog = require('./SaveImageDialog.jsx');
 
 React.render(<SaveImageDialog />, document.getElementById('popup'));
