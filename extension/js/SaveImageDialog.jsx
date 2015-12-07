@@ -65,7 +65,7 @@ var SaveImageDialog = React.createClass({
         function(status) { return status === COMPLETE; }
       );
   },
-  downloadImages: function() {
+  onClickDownload: function() {
     this.getTabsWithImages(function(tabs) {
       var statuses = _.reduce(tabs, function(memo, tab) {
         memo[tab.id] = PENDING;
@@ -110,9 +110,9 @@ var SaveImageDialog = React.createClass({
   imageCount: function() {
     return this.state.imageTabList.length;
   },
-  downloadOptions: function() {
+  renderDownloadOptions: function() {
     return (
-      <form id="download-options">
+      <form id="download-options" onSubmit={this.onSubmitDownloadOptions}>
         <ul>
           <li>
             <input
@@ -145,6 +145,10 @@ var SaveImageDialog = React.createClass({
       </form>
     );
   },
+  onSubmitDownloadOptions: function(event) {
+    event.preventDefault();
+    this.onClickDownload();
+  },
   onClickCloseDownloadedTabs: function() {
     chrome.tabs.remove(this.getCompletedTabs());
     this.onClickDismiss();
@@ -169,10 +173,10 @@ var SaveImageDialog = React.createClass({
     if (this.hasImages()) {
       content = (
         <div>
-          <button id="download" disabled={this.isDownloading()} onClick={this.downloadImages}>
+          <button id="download" disabled={this.isDownloading()} onClick={this.onClickDownload}>
             Download {pluralize('image', this.imageCount(), true)}
           </button>
-          {this.downloadOptions()}
+          {this.renderDownloadOptions()}
           <ul id="links">
             {this.state.imageTabList.map(this.imageTabListItem)}
           </ul>
