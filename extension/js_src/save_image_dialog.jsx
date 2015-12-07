@@ -1,6 +1,7 @@
 var React = require('react');
 var pluralize = require('pluralize');
 var _ = require('underscore');
+var moment = require('moment');
 
 var PENDING = 'pending';
 var COMPLETE = 'complete';
@@ -10,6 +11,8 @@ var SaveImageDialog = React.createClass({
     return {
       imageTabList: [],
       imageDownloadStatuses: {},
+      customDownloadLocation: false,
+      customDownloadLocationPath: "SaveTabbedImages-" + moment().format('YYYY-MM-DD')
     };
   },
   getTabsWithImages: function(callback) {
@@ -28,9 +31,25 @@ var SaveImageDialog = React.createClass({
       return (status === COMPLETE) ? parseInt(tabID, 10) : null;
     }));
   },
+  getDownloadPath: function() {
+    console.log('getDownloadPath', this.state);
+    if (this.state.customDownloadLocation) {
+      return this.state.customDownloadLocationPath + "/";
+    } else {
+      return "";
+    }
+  },
   componentDidMount: function() {
+    // get image list
     this.getTabsWithImages(function(tabs) {
       this.setState({imageTabList: tabs});
+    }.bind(this));
+
+    // set download location
+    chrome.downloads.onDeterminingFilename.addListener(function(downloadItem, suggest) {
+      suggest({
+        filename: this.getDownloadPath() + downloadItem.filename
+      });
     }.bind(this));
   },
   isDownloading: function() {
@@ -96,15 +115,30 @@ var SaveImageDialog = React.createClass({
       <form id="download-options">
         <ul>
           <li>
-            <input id="path-option-default" type="radio" name="path-option" value="default" checked />
+            <input
+              id="path-option-default"
+              type="radio"
+              value="default"
+              checked={!this.state.customDownloadLocation} onChange={this.onChangeCustomDownloadLocation}
+            />
             <label htmlFor="path-option-default">Default download location</label>
           </li>
           <li>
-            <input id="path-option-custom" type="radio" name="path-option" value="custom" />
-
+            <input
+              id="path-option-custom"
+              type="radio"
+              value="custom"
+              checked={this.state.customDownloadLocation} onChange={this.onChangeCustomDownloadLocation}
+            />
             <div className="path-wrapper">
               <label htmlFor="path-option-custom">Subfolder within default location</label>
-              <input type="text" name="path" id="path" disabled />
+              <input
+                id="path"
+                type="text"
+                value={this.state.customDownloadLocationPath}
+                disabled={!this.state.customDownloadLocation}
+                onChange={this.onChangeCustomDownloadLocationPath}
+              />
             </div>
           </li>
         </ul>
@@ -117,6 +151,18 @@ var SaveImageDialog = React.createClass({
   },
   onClickDismiss: function() {
     window.close();
+  },
+  onChangeCustomDownloadLocation: function(event) {
+    if (event.target.value === 'default') {
+      this.setState({ customDownloadLocation: false });
+    } else {
+      this.setState({ customDownloadLocation: true });
+    }
+  },
+  onChangeCustomDownloadLocationPath: function(event) {
+    this.setState({
+      customDownloadLocationPath: event.target.value
+    });
   },
   render: function() {
     var content;
@@ -136,7 +182,7 @@ var SaveImageDialog = React.createClass({
     } else {
       content = (
         <div>
-          <p id="message">No images opened as tabs in current window.</p>
+          <p>No images opened as tabs in current window.</p>
           <button id="dismiss" onClick={this.onClickDismiss}>Close</button>
         </div>
       );
