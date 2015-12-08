@@ -32,6 +32,7 @@ chrome.webRequest.onHeadersReceived.addListener(function(details) {
     // If false, we know tab is not an image, and skip fallback check.
     tabsWithImages[details.tabId] = imageMimeTypes[headerValue] || false;
 
+    // noreintegrate this doesn't (and can't?) distinguish between different windows
     // Display number of images on extension icon
     var count = _.filter(_.pairs(tabsWithImages), function(pair) { return pair[1]; }).length;
     chrome.browserAction.setBadgeText({text: count + ''});
