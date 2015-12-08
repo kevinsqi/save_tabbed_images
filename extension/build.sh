@@ -5,5 +5,4 @@
 mkdir -p dist/js
 
 ./node_modules/.bin/browserify -t reactify -o dist/js/popup.js js/popup.jsx
-
-cp js/background.js dist/js/background.js
+./node_modules/.bin/browserify -o dist/js/background.js js/background.js

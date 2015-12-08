@@ -1,3 +1,5 @@
+var _ = require('underscore');
+
 // Reference on detecting MIME type:
 // http://stackoverflow.com/a/21042958/341512
 
@@ -18,6 +20,10 @@ var imageExtensions = {
   "webp": true
 };
 
+chrome.browserAction.setBadgeBackgroundColor({
+  color: [0, 162, 232, 255]
+});
+
 // Track which tabs are images based on MIME type
 chrome.webRequest.onHeadersReceived.addListener(function(details) {
   if (details.tabId !== -1) {
@@ -25,6 +31,10 @@ chrome.webRequest.onHeadersReceived.addListener(function(details) {
 
     // If false, we know tab is not an image, and skip fallback check.
     tabsWithImages[details.tabId] = imageMimeTypes[headerValue] || false;
+
+    // Display number of images on extension icon
+    var count = _.filter(_.pairs(tabsWithImages), function(pair) { return pair[1]; }).length;
+    chrome.browserAction.setBadgeText({text: count + ''});
   }
 }, {
   urls: ['*://*/*'],
@@ -75,3 +85,4 @@ chrome.runtime.onMessage.addListener(
     }
   }
 );
+
