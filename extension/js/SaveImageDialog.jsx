@@ -6,6 +6,8 @@ var moment = require('moment');
 var PENDING = 'pending';
 var COMPLETE = 'complete';
 
+var CUSTOM_DOWNLOAD_PATHS_KEY = 'CUSTOM_DOWNLOAD_PATHS';
+
 var SaveImageDialog = React.createClass({
   getInitialState: function() {
     return {
@@ -13,7 +15,7 @@ var SaveImageDialog = React.createClass({
       downloadStatuses: {},
       useCustomDownloadPath: false,
       customDownloadPath: "SaveTabbedImages-" + moment().format('YYYY-MM-DD'),
-      savedCustomDownloadLocations:
+      savedCustomDownloadPaths: []
     };
   },
   getTabsWithImages: function(callback) {
@@ -45,17 +47,23 @@ var SaveImageDialog = React.createClass({
       this.setState({ tabList: tabs });
     }.bind(this));
 
-    // set download location
+    // set download path
     chrome.downloads.onDeterminingFilename.addListener(function(downloadItem, suggest) {
       suggest({
         filename: this.getDownloadPath() + downloadItem.filename
       });
     }.bind(this));
 
-    // get previous download locations
-    chrome.storage.local.get('savedCustomDownloadLocations', function(locations) {
-      console.log(locations);
-    });
+    // get previous download paths
+    chrome.storage.local.get(CUSTOM_DOWNLOAD_PATHS_KEY, function(storage) {
+      var paths = JSON.parse(storage[CUSTOM_DOWNLOAD_PATHS_KEY]);
+      console.log('Getting download paths', storage, paths);
+      if (Object.keys(paths).length > 0) {
+        this.setState({
+          savedCustomDownloadPaths: paths
+        });
+      }
+    }.bind(this));
   },
   isDownloading: function() {
     return _.any(
@@ -101,6 +109,20 @@ var SaveImageDialog = React.createClass({
         );
       }.bind(this));
     }.bind(this));
+
+    // save download location, if customized
+    if (this.state.useCustomDownloadPath) {
+      var obj = {};
+      obj[CUSTOM_DOWNLOAD_PATHS_KEY] = JSON.stringify(
+        this.state.savedCustomDownloadPaths.concat([{
+          path: this.state.customDownloadPath,
+          lastUsage: new Date(),
+        }])
+      );
+      chrome.storage.local.set(obj, function() {
+        console.log('Saved download path', obj);
+      });
+    }
   },
   hasImages: function() {
     return this.imageCount() > 0;
@@ -128,6 +150,12 @@ var SaveImageDialog = React.createClass({
             />
             <label htmlFor="path-option-default">Default download location</label>
           </li>
+          {
+            this.state.savedCustomDownloadPaths.map(function(path) {
+              console.log(path);
+              return <li>{path.path} {path.lastUsage}</li>;
+            })
+          }
           <li>
             <input
               id="path-option-custom"
