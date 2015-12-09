@@ -3,10 +3,9 @@
   "private": true,
   "description": "Save Tabbed Images Chrome Extension",
   "dependencies": {
-    "jquery": "2.1.x",
     "moment": "~2.10.6",
     "pluralize": "1.2.x",
-    "react": "0.13.x",
+    "react": "0.14.x",
     "underscore": "~1.8.3"
   },
   "devDependencies": {
@@ -14,9 +13,6 @@
     "babel-loader": "^6.2.0",
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-react": "^6.3.13",
-    "browserify": "^11.1.x",
-    "reactify": "^1.1.x",
-    "watchify": "^3.4.x",
     "webpack": "^1.12.9"
   }
 }
