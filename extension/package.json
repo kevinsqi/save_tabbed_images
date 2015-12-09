@@ -2,6 +2,9 @@
   "name": "save_tabbed_images",
   "private": true,
   "description": "Save Tabbed Images Chrome Extension",
+  "scripts": {
+    "lint": "eslint --ext .js,.jsx ."
+  },
   "dependencies": {
     "moment": "~2.10.6",
     "pluralize": "1.2.x",
@@ -13,6 +16,10 @@
     "babel-loader": "^6.2.0",
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-react": "^6.3.13",
+    "eslint": "^1.10.3",
+    "eslint-config-airbnb": "^2.0.0",
+    "eslint-friendly-formatter": "^1.2.2",
+    "eslint-plugin-react": "^3.11.3",
     "webpack": "^1.12.9"
   }
 }

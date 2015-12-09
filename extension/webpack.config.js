@@ -24,5 +24,8 @@ module.exports = {
         }
       }
     ]
+  },
+  externals: {
+    'chrome': 'chrome'
   }
 };
