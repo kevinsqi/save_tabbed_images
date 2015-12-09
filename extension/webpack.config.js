@@ -1,10 +1,11 @@
 module.exports = {
   context: __dirname,
   entry: {
-    popup: __dirname + "/js/popup"
+    popup: "./js/popup",
+    background: "./js/background"
   },
   output: {
-    path: __dirname + "/dist/js",
+    path: "./dist/js",
     filename: "[name].js"
   },
   resolve: {

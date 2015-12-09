@@ -1,12 +1,12 @@
-var React = require('react');
-var pluralize = require('pluralize');
-var _ = require('underscore');
-var moment = require('moment');
+import React from 'react';
+import pluralize from 'pluralize';
+import _ from 'underscore';
+import moment from 'moment';
 
-var PENDING = 'pending';
-var COMPLETE = 'complete';
+const PENDING = 'pending';
+const COMPLETE = 'complete';
 
-var SaveImageDialog = React.createClass({
+const SaveImageDialog = React.createClass({
   getInitialState: function() {
     return {
       tabList: [],
