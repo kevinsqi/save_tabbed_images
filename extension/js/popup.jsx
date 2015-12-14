@@ -1,4 +1,4 @@
-var React = require('react');
-var SaveImageDialog = require('./SaveImageDialog.jsx');
+import React from 'react';
+import SaveImageDialog from './SaveImageDialog';
 
 React.render(<SaveImageDialog />, document.getElementById('popup'));
