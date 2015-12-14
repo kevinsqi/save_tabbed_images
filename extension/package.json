@@ -3,6 +3,7 @@
   "private": true,
   "description": "Save Tabbed Images Chrome Extension",
   "scripts": {
+    "watch": "./node_modules/.bin/webpack --watch",
     "lint": "eslint --ext .js,.jsx ."
   },
   "dependencies": {

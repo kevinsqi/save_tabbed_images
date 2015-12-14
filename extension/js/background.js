@@ -1,3 +1,5 @@
+import chrome from 'chrome';
+
 // Reference on detecting MIME type:
 // http://stackoverflow.com/a/21042958/341512
 
@@ -55,6 +57,7 @@ chrome.runtime.onMessage.addListener(
     if (request.type === "checktabs") {
       var tabsToReturn = [];
       var tabs = request.tabs;
+      var match;
       for (var i = 0; i < tabs.length; i++) {
         var tab = tabs[i];
         var tabObj = {id: tab.id, url: tab.url};

@@ -1,4 +1,5 @@
 import React from 'react';
+import chrome from 'chrome';
 import pluralize from 'pluralize';
 import _ from 'underscore';
 import moment from 'moment';
