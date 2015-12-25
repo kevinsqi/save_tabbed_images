@@ -1,29 +1,29 @@
-var React = require('react');
-var pluralize = require('pluralize');
-var _ = require('underscore');
-var moment = require('moment');
+import React from 'react';
+import chrome from 'chrome';
+import pluralize from 'pluralize';
+import _ from 'underscore';
+import moment from 'moment';
 
-var PENDING = 'pending';
-var COMPLETE = 'complete';
+const PENDING = 'pending';
+const COMPLETE = 'complete';
+const CUSTOM_DOWNLOAD_PATHS_KEY = 'CUSTOM_DOWNLOAD_PATHS';
 
-var CUSTOM_DOWNLOAD_PATHS_KEY = 'CUSTOM_DOWNLOAD_PATHS';
-
-var SaveImageDialog = React.createClass({
+const SaveImageDialog = React.createClass({
   getInitialState: function() {
     return {
       tabList: [],
       downloadStatuses: {},
       useCustomDownloadPath: false,
       customDownloadPath: "SaveTabbedImages-" + moment().format('YYYY-MM-DD'),
-      savedCustomDownloadPaths: []
+      savedCustomDownloadPaths: [],
     };
   },
   getTabsWithImages: function(callback) {
     chrome.tabs.query(
-      {currentWindow: true},
+      { currentWindow: true },
       function(tabs) {
         // Query background process for which tabs are images
-        chrome.runtime.sendMessage({type: "checktabs", tabs: tabs}, function(response) {
+        chrome.runtime.sendMessage({ type: 'checktabs', tabs: tabs }, function(response) {
           callback(response.tabs);
         });
       }
@@ -36,9 +36,9 @@ var SaveImageDialog = React.createClass({
   },
   getDownloadPath: function() {
     if (this.state.useCustomDownloadPath) {
-      return this.state.customDownloadPath + "/";
+      return this.state.customDownloadPath + '/';
     } else {
-      return "";
+      return '';
     }
   },
   componentDidMount: function() {
@@ -80,7 +80,7 @@ var SaveImageDialog = React.createClass({
   },
   onClickDownload: function() {
     this.getTabsWithImages(function(tabs) {
-      var statuses = _.reduce(tabs, function(memo, tab) {
+      const statuses = _.reduce(tabs, function(memo, tab) {
         memo[tab.id] = PENDING;
         return memo;
       }, {});
@@ -97,7 +97,7 @@ var SaveImageDialog = React.createClass({
           function(id) {
             if (id) {
               // Download successful
-              var newStatuses = _({}).extend(this.state.downloadStatuses);
+              const newStatuses = _({}).extend(this.state.downloadStatuses);
               newStatuses[tab.id] = COMPLETE;
               this.setState({
                 downloadStatuses: newStatuses
@@ -202,28 +202,24 @@ var SaveImageDialog = React.createClass({
     });
   },
   render: function() {
-    var content;
-    if (this.hasImages()) {
-      content = (
-        <div>
-          <button id="download" disabled={this.isDownloading()} onClick={this.onClickDownload}>
-            Download {pluralize('image', this.imageCount(), true)}
-          </button>
-          {this.renderDownloadOptions()}
-          <ul id="links">
-            {this.state.tabList.map(this.renderTabListItem)}
-          </ul>
-          {this.isComplete() ? <button id="close-tabs" onClick={this.onClickCloseDownloadedTabs}>Close Downloaded Tabs</button> : null}
-        </div>
-      );
-    } else {
-      content = (
-        <div>
-          <p>No images opened as tabs in current window.</p>
-          <button id="dismiss" onClick={this.onClickDismiss}>Close</button>
-        </div>
-      );
-    }
+    const content = this.hasImages() ? (
+      <div>
+        <button id="download" disabled={this.isDownloading()} onClick={this.onClickDownload}>
+          Download {pluralize('image', this.imageCount(), true)}
+        </button>
+        {this.renderDownloadOptions()}
+        <ul id="links">
+          {this.state.tabList.map(this.renderTabListItem)}
+        </ul>
+        {this.isComplete() ? <button id="close-tabs" onClick={this.onClickCloseDownloadedTabs}>Close Downloaded Tabs</button> : null}
+      </div>
+    ) : (
+      <div>
+        <p>No images opened as tabs in current window.</p>
+        <button id="dismiss" onClick={this.onClickDismiss}>Close</button>
+      </div>
+    );
+
     return (
       <div className="save-image-dialog">
         {content}
