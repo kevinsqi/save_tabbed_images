@@ -4,6 +4,7 @@
     "comma-dangle": 0,
     "id-length": [2, {"min": 3, "exceptions": ["$", "_", "i", "id", "ev", "el"]}],
     "indent": [2, 2, {"SwitchCase": 1}],
+    "key-spacing": 0,
     "no-else-return": 1,
     "react/jsx-boolean-value": [2, "always"],
     "react/sort-comp": 1,
