@@ -146,14 +146,26 @@ const SaveImageDialog = React.createClass({
               id="path-option-default"
               type="radio"
               value="default"
-              checked={!this.state.useCustomDownloadPath} onChange={this.onChangeCustomDownloadLocation}
+              checked={!this.state.useCustomDownloadPath}
+              onChange={this.onChangeCustomDownloadLocation}
             />
             <label htmlFor="path-option-default">Default download location</label>
           </li>
           {
+            // TODO sort by path.lastUsage
             this.state.savedCustomDownloadPaths.map(function(path) {
               console.log(path);
-              return <li>{path.path} {path.lastUsage}</li>;
+              return (
+                <li>
+                  <input
+                    id="path-option-saved-custom"
+                    type="radio"
+                    value="custom"
+                    checked={false}
+                  />
+                  <label htmlFor="path-option-saved-custom">{path.path}</label>
+                </li>
+              );
             })
           }
           <li>
@@ -161,7 +173,8 @@ const SaveImageDialog = React.createClass({
               id="path-option-custom"
               type="radio"
               value="custom"
-              checked={this.state.useCustomDownloadPath} onChange={this.onChangeCustomDownloadLocation}
+              checked={this.state.useCustomDownloadPath}
+              onChange={this.onChangeCustomDownloadLocation}
             />
             <div className="path-wrapper">
               <label htmlFor="path-option-custom">Subfolder within default location</label>
