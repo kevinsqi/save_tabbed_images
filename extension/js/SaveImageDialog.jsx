@@ -151,23 +151,6 @@ const SaveImageDialog = React.createClass({
             />
             <label htmlFor="path-option-default">Default download location</label>
           </li>
-          {
-            // TODO sort by path.lastUsage
-            this.state.savedCustomDownloadPaths.map(function(path) {
-              console.log(path);
-              return (
-                <li>
-                  <input
-                    id="path-option-saved-custom"
-                    type="radio"
-                    value="custom"
-                    checked={false}
-                  />
-                  <label htmlFor="path-option-saved-custom">{path.path}</label>
-                </li>
-              );
-            })
-          }
           <li>
             <input
               id="path-option-custom"
@@ -187,6 +170,23 @@ const SaveImageDialog = React.createClass({
               />
             </div>
           </li>
+          {
+            // TODO sort by path.lastUsage
+            this.state.savedCustomDownloadPaths.map(function(path) {
+              console.log(path);
+              return (
+                <li>
+                  <input
+                    id="path-option-saved-custom"
+                    type="radio"
+                    value="custom"
+                    checked={false}
+                  />
+                  <label htmlFor="path-option-saved-custom">{path.path}</label>
+                </li>
+              );
+            })
+          }
         </ul>
       </form>
     );
