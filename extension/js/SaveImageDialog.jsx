@@ -142,14 +142,15 @@ const SaveImageDialog = React.createClass({
       <form id="download-options" onSubmit={this.onSubmitDownloadOptions}>
         <ul>
           <li>
-            <input
-              id="path-option-default"
-              type="radio"
-              value="default"
-              checked={!this.state.useCustomDownloadPath}
-              onChange={this.onChangeCustomDownloadLocation}
-            />
-            <label htmlFor="path-option-default">Default download location</label>
+            <label>
+              <input
+                type="radio"
+                value="default"
+                checked={!this.state.useCustomDownloadPath}
+                onChange={this.onChangeCustomDownloadLocation}
+              />
+              Default download location
+            </label>
           </li>
           <li>
             <input
@@ -176,13 +177,14 @@ const SaveImageDialog = React.createClass({
               console.log(path);
               return (
                 <li>
-                  <input
-                    id="path-option-saved-custom"
-                    type="radio"
-                    value="custom"
-                    checked={false}
-                  />
-                  <label htmlFor="path-option-saved-custom">{path.path}</label>
+                  <label>
+                    <input
+                      type="radio"
+                      value="custom"
+                      checked={false}
+                    />
+                    {path.path}
+                  </label>
                 </li>
               );
             })
