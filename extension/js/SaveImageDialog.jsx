@@ -1,5 +1,6 @@
 import React from 'react';
 import chrome from 'chrome';
+import update from 'react-addons-update';
 import pluralize from 'pluralize';
 import _ from 'underscore';
 import moment from 'moment';
@@ -112,13 +113,18 @@ const SaveImageDialog = React.createClass({
 
     // save download location, if customized
     if (this.state.useCustomDownloadPath) {
-      var obj = {};
-      obj[CUSTOM_DOWNLOAD_PATHS_KEY] = JSON.stringify(
-        this.state.savedCustomDownloadPaths.concat([{
-          path: this.state.customDownloadPath,
-          lastUsage: new Date(),
-        }])
-      );
+      let obj = {};
+
+      const newSavedCustomDownloadPaths = this.state.savedCustomDownloadPaths.concat([{
+        path: this.state.customDownloadPath,
+        lastUsage: new Date(),
+      }]);
+
+      this.setState(update(this.state, {
+        savedCustomDownloadPaths: { $set: newSavedCustomDownloadPaths },
+      }));
+
+      obj[CUSTOM_DOWNLOAD_PATHS_KEY] = JSON.stringify(newSavedCustomDownloadPaths);
       chrome.storage.local.set(obj, function() {
         console.log('Saved download path', obj);
       });
@@ -176,7 +182,7 @@ const SaveImageDialog = React.createClass({
             this.state.savedCustomDownloadPaths.map(function(path) {
               console.log(path);
               return (
-                <li>
+                <li key={path.path}>
                   <label>
                     <input
                       type="radio"
