@@ -7,10 +7,11 @@
     "lint": "eslint --ext .js,.jsx ./js"
   },
   "dependencies": {
-    "moment": "~2.10.6",
-    "pluralize": "1.2.x",
-    "react": "0.14.x",
-    "underscore": "~1.8.3"
+    "moment": "^2.10.6",
+    "pluralize": "^1.2.0",
+    "react": "~0.14.0",
+    "react-addons-update": "*",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "babel-core": "^6.3.15",
