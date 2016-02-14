@@ -5,6 +5,7 @@ import pluralize from 'pluralize';
 import _ from 'underscore';
 import Select from 'react-select';
 import { sanitizeFilePath } from './helpers';
+import { getTabsWithImages } from './imageHelpers';
 
 const PENDING = 'pending';
 const COMPLETE = 'complete';
@@ -18,17 +19,6 @@ const SaveImageDialog = React.createClass({
       customDownloadPath: null,
       savedCustomDownloadPaths: [],
     };
-  },
-  getTabsWithImages: function(callback) {
-    chrome.tabs.query(
-      { currentWindow: true },
-      function(tabs) {
-        // Query background process for which tabs are images
-        chrome.runtime.sendMessage({ type: 'checktabs', tabs: tabs }, function(response) {
-          callback(response.tabs);
-        });
-      }
-    );
   },
   getCompletedTabs: function() {
     return _.compact(_.map(this.state.downloadStatuses, function(status, tabID) {
@@ -44,7 +34,7 @@ const SaveImageDialog = React.createClass({
   },
   componentDidMount: function() {
     // get image list
-    this.getTabsWithImages(function(tabs) {
+    getTabsWithImages(function(tabs) {
       this.setState({ tabList: tabs });
     }.bind(this));
 
@@ -80,7 +70,7 @@ const SaveImageDialog = React.createClass({
       );
   },
   onClickDownload: function() {
-    this.getTabsWithImages(function(tabs) {
+    getTabsWithImages(function(tabs) {
       const statuses = _.reduce(tabs, function(memo, tab) {
         memo[tab.id] = PENDING;
         return memo;
@@ -219,4 +209,4 @@ const SaveImageDialog = React.createClass({
   }
 });
 
-module.exports = SaveImageDialog;
+export default SaveImageDialog;
