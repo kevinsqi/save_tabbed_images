@@ -110,6 +110,28 @@
       "from": "react-addons-update@*",
       "resolved": "https://registry.npmjs.org/react-addons-update/-/react-addons-update-0.14.7.tgz"
     },
+    "react-dom": {
+      "version": "0.14.7",
+      "from": "react-dom@>=0.14.1 <0.15.0",
+      "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-0.14.7.tgz"
+    },
+    "react-select": {
+      "version": "0.9.1",
+      "from": "react-select@*",
+      "resolved": "https://registry.npmjs.org/react-select/-/react-select-0.9.1.tgz",
+      "dependencies": {
+        "classnames": {
+          "version": "2.2.3",
+          "from": "classnames@>=2.2.0 <3.0.0",
+          "resolved": "https://registry.npmjs.org/classnames/-/classnames-2.2.3.tgz"
+        },
+        "react-input-autosize": {
+          "version": "0.6.8",
+          "from": "react-input-autosize@>=0.6.2 <0.7.0",
+          "resolved": "https://registry.npmjs.org/react-input-autosize/-/react-input-autosize-0.6.8.tgz"
+        }
+      }
+    },
     "underscore": {
       "version": "1.8.3",
       "from": "underscore@>=1.8.3 <2.0.0",
