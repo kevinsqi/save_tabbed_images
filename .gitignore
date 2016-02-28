@@ -1,4 +1,4 @@
-extension/dist/js
+dist/js
 
 node_modules
 npm-debug.log
