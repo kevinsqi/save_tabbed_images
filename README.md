@@ -6,12 +6,6 @@ A simple and easy-to-use chrome extension to download all images opened as tabs 
 
 ## Development
 
-Go to development directory:
-
-```
-cd extension
-```
-
 Install node modules:
 
 ```
