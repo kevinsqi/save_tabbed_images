@@ -47,12 +47,14 @@ const SaveImageDialog = React.createClass({
 
     // get previous download paths
     chrome.storage.local.get(CUSTOM_DOWNLOAD_PATHS_KEY, function(storage) {
-      var paths = JSON.parse(storage[CUSTOM_DOWNLOAD_PATHS_KEY]);
-      console.log('Getting download paths', storage, paths);
-      if (Object.keys(paths).length > 0) {
-        this.setState({
-          savedCustomDownloadPaths: paths
-        });
+      if (storage[CUSTOM_DOWNLOAD_PATHS_KEY]) {
+        var paths = JSON.parse(storage[CUSTOM_DOWNLOAD_PATHS_KEY]);
+        if (Object.keys(paths).length > 0) {
+          console.log('Setting saved download paths', storage, paths);
+          this.setState({
+            savedCustomDownloadPaths: paths
+          });
+        }
       }
     }.bind(this));
   },
@@ -137,24 +139,32 @@ const SaveImageDialog = React.createClass({
     const customOptions = this.state.savedCustomDownloadPaths.map((path) => {
       return { label: path.path, value: path.path }
     });
-    const sanitizedPath = sanitizeFilePath(input);
-    console.log('ez', sanitizedPath);
-    return [
+
+    const options = [
       { label: 'Default download location', value: 'default' },
-    ].concat(customOptions).concat([
-      { label: `Create new subfolder ${sanitizedPath}`, value: sanitizedPath }
-    ]);
+    ].concat(customOptions);
+    
+    const sanitizedPath = sanitizeFilePath(input);
+    if (sanitizedPath && sanitizedPath.length > 0) {
+      options.concat([
+        { label: `Create new subfolder ${sanitizedPath}`, value: sanitizedPath }
+      ]);
+    }
+
+    console.log('getdownload', options);
+    return options;
   },
   renderDownloadOptions: function() {
     return (
       <form id="download-options" onSubmit={this.onSubmitDownloadOptions}>
         <ul>
           <li>
-            <label>Destination:</label>
+            <label className="small-label">Download location</label>
             <Select
               value="default"
               asyncOptions={(input, callback) => {
-                return callback(null, {
+                console.log('async', this.getDownloadOptions(input));
+                callback(null, {
                   options: this.getDownloadOptions(input),
                   complete: false,
                 });
