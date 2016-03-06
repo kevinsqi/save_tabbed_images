@@ -103,6 +103,10 @@ const SaveImageDialog = React.createClass({
       }.bind(this));
     }.bind(this));
 
+    this.saveDownloadPath();
+  },
+
+  saveDownloadPath: function() {
     // save download location, if customized
     if (this.state.useCustomDownloadPath) {
       let obj = {};
@@ -122,6 +126,7 @@ const SaveImageDialog = React.createClass({
       });
     }
   },
+
   hasImages: function() {
     return this.imageCount() > 0;
   },
@@ -136,23 +141,16 @@ const SaveImageDialog = React.createClass({
     return this.state.tabList.length;
   },
   getDownloadOptions: function(input) {
+    const sanitizedPath = sanitizeFilePath(input);
     const customOptions = this.state.savedCustomDownloadPaths.map((path) => {
       return { label: path.path, value: path.path }
     });
+    const newFolderOptions = (sanitizedPath && sanitizedPath.length > 0) ?
+      [{ label: `Create new subfolder ${sanitizedPath}`, value: sanitizedPath }] : [];
 
-    const options = [
-      { label: 'Default download location', value: 'default' },
-    ].concat(customOptions);
-    
-    const sanitizedPath = sanitizeFilePath(input);
-    if (sanitizedPath && sanitizedPath.length > 0) {
-      options.concat([
-        { label: `Create new subfolder ${sanitizedPath}`, value: sanitizedPath }
-      ]);
-    }
-
-    console.log('getdownload', options);
-    return options;
+    return [{ label: 'Default download location', value: 'default' }]
+      .concat(customOptions)
+      .concat(newFolderOptions);
   },
   renderDownloadOptions: function() {
     return (
@@ -169,6 +167,7 @@ const SaveImageDialog = React.createClass({
                   complete: false,
                 });
               }}
+              filterOption={(option) => option}
               onChange={this.onChangeDownloadPath}
             />
           </li>
