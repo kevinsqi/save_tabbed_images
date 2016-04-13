@@ -38,9 +38,9 @@ class SaveImageDialog extends React.Component {
   getTabsWithImages(callback) {
     chrome.tabs.query(
       { currentWindow: true },
-      function(tabs) {
+      (tabs) => {
         // Query background process for which tabs are images
-        chrome.runtime.sendMessage({ type: 'checktabs', tabs: tabs }, function(response) {
+        chrome.runtime.sendMessage({ type: 'checktabs', tabs: tabs }, (response) => {
           callback(response.tabs);
         });
       }
@@ -48,38 +48,38 @@ class SaveImageDialog extends React.Component {
   }
 
   getCompletedTabs() {
-    return _.compact(_.map(this.state.downloadStatuses, function(status, tabID) {
-      return (status === COMPLETE) ? parseInt(tabID, 10) : null;
-    }));
+    return _.compact(
+      _.map(this.state.downloadStatuses, (status, tabID) => {
+        return (status === COMPLETE) ? parseInt(tabID, 10) : null;
+      })
+    );
   }
 
   getDownloadPath() {
-    console.log('getDownloadPath', this.state);
     if (this.state.useCustomDownloadLocation) {
       return this.state.customDownloadLocation + '/';
-    } else {
-      return '';
     }
+    return '';
   }
 
   componentDidMount() {
     // get image list
-    this.getTabsWithImages(function(tabs) {
+    this.getTabsWithImages((tabs) => {
       this.setState({ tabList: tabs });
-    }.bind(this));
+    });
 
     // set download location
-    chrome.downloads.onDeterminingFilename.addListener(function(downloadItem, suggest) {
+    chrome.downloads.onDeterminingFilename.addListener((downloadItem, suggest) => {
       suggest({
         filename: this.getDownloadPath() + downloadItem.filename
       });
-    }.bind(this));
+    });
   }
 
   isDownloading() {
     return _.any(
       _.values(this.state.downloadStatuses),
-      function(status) { return status === PENDING; }
+      (status) => (status === PENDING)
     );
   }
 
@@ -87,13 +87,13 @@ class SaveImageDialog extends React.Component {
     return _.size(this.state.downloadStatuses) > 0 &&
       _.all(
         _.values(this.state.downloadStatuses),
-        function(status) { return status === COMPLETE; }
+        (status) => (status === COMPLETE)
       );
   }
 
   onClickDownload() {
-    this.getTabsWithImages(function(tabs) {
-      const statuses = _.reduce(tabs, function(memo, tab) {
+    this.getTabsWithImages((tabs) => {
+      const statuses = _.reduce(tabs, (memo, tab) => {
         memo[tab.id] = PENDING;
         return memo;
       }, {});
@@ -101,13 +101,10 @@ class SaveImageDialog extends React.Component {
         downloadStatuses: statuses
       });
 
-      tabs.forEach(function(tab) {
+      tabs.forEach((tab) => {
         chrome.downloads.download(
-          {
-            url: tab.url,
-            conflictAction: 'uniquify'
-          },
-          function(id) {
+          { url: tab.url, conflictAction: 'uniquify' },
+          (id) => {
             if (id) {
               // Download successful
               const newStatuses = _({}).extend(this.state.downloadStatuses);
@@ -118,10 +115,10 @@ class SaveImageDialog extends React.Component {
             } else {
               // Download failed
             }
-          }.bind(this)
+          }
         );
-      }.bind(this));
-    }.bind(this));
+      });
+    });
   }
 
   hasImages() {

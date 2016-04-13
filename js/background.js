@@ -3,16 +3,16 @@ import chrome from 'chrome';
 // Reference on detecting MIME type:
 // http://stackoverflow.com/a/21042958/341512
 
-var tabsWithImages = {};
+const tabsWithImages = {};
 
-var imageMimeTypes = {
+const imageMimeTypes = {
   "image/jpeg": true,
   "image/png":  true,
   "image/gif":  true,
   "image/webp": true
 };
 
-var imageExtensions = {
+const imageExtensions = {
   "jpg":  true,
   "jpeg": true,
   "png":  true,
