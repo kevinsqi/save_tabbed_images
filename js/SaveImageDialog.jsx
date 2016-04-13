@@ -215,8 +215,13 @@ class SaveImageDialog extends React.Component {
       </div>
     ) : (
       <div>
-        <p>No images opened as tabs in current window.</p>
-        <button id="dismiss" onClick={this.onClickDismiss}>Close</button>
+        <div className="align-center">
+          <img src="img/icon48.png" alt="icon" />
+          <h1>Save Tabbed Images</h1>
+          <p>No images opened in current window.</p>
+          <p>Right click an image and select "Open Image in New Tab" to get started.</p>
+        </div>
+        <button id="dismiss" onClick={this.onClickDismiss}>Got it</button>
       </div>
     );
 
