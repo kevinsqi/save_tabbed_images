@@ -196,4 +196,4 @@ const SaveImageDialog = React.createClass({
   }
 });
 
-module.exports = SaveImageDialog;
+export default SaveImageDialog;
