@@ -1,4 +1,5 @@
 import chrome from 'chrome';
+import { getContentTypeHeader } from './backgroundHelpers';
 
 // Reference on detecting MIME type:
 // http://stackoverflow.com/a/21042958/341512
@@ -36,24 +37,6 @@ chrome.webRequest.onHeadersReceived.addListener(
   },
   ['responseHeaders']
 );
-
-function getContentTypeHeader(headers) {
-  let contentTypeHeader;
-  let contentTypeHeaderValue;
-
-  for (let i = 0; i < headers.length; ++i) {
-    const header = headers[i];
-    if (header.name.toLowerCase() === 'content-type') {
-      contentTypeHeader = header;
-      break;
-    }
-  }
-
-  // If header is set, use its value. Otherwise, use undefined.
-  contentTypeHeaderValue = contentTypeHeader && contentTypeHeader.value.toLowerCase().split(';', 1)[0];
-
-  return contentTypeHeaderValue;
-}
 
 // Given array of tabs, return URLs of those which are images
 chrome.runtime.onMessage.addListener(
