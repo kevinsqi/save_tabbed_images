@@ -1,31 +1,24 @@
 import React from 'react';
 import chrome from 'chrome';
+import update from 'react-addons-update';
 import pluralize from 'pluralize';
 import _ from 'underscore';
-import moment from 'moment';
+import Select from 'react-select';
+import { sanitizeFilePath } from './helpers';
+import { getTabsWithImages } from './imageHelpers';
 
 const PENDING = 'pending';
 const COMPLETE = 'complete';
+const CUSTOM_DOWNLOAD_PATHS_KEY = 'CUSTOM_DOWNLOAD_PATHS';
 
 const SaveImageDialog = React.createClass({
   getInitialState: function() {
     return {
       tabList: [],
       downloadStatuses: {},
-      useCustomDownloadLocation: false,
-      customDownloadLocation: 'SaveTabbedImages-' + moment().format('YYYY-MM-DD')
+      customDownloadPath: null,
+      savedCustomDownloadPaths: [],
     };
-  },
-  getTabsWithImages: function(callback) {
-    chrome.tabs.query(
-      { currentWindow: true },
-      function(tabs) {
-        // Query background process for which tabs are images
-        chrome.runtime.sendMessage({ type: 'checktabs', tabs: tabs }, function(response) {
-          callback(response.tabs);
-        });
-      }
-    );
   },
   getCompletedTabs: function() {
     return _.compact(_.map(this.state.downloadStatuses, function(status, tabID) {
@@ -33,24 +26,36 @@ const SaveImageDialog = React.createClass({
     }));
   },
   getDownloadPath: function() {
-    console.log('getDownloadPath', this.state);
-    if (this.state.useCustomDownloadLocation) {
-      return this.state.customDownloadLocation + '/';
+    if (this.state.customDownloadPath) {
+      return this.state.customDownloadPath + '/';
     } else {
       return '';
     }
   },
   componentDidMount: function() {
     // get image list
-    this.getTabsWithImages(function(tabs) {
+    getTabsWithImages(function(tabs) {
       this.setState({ tabList: tabs });
     }.bind(this));
 
-    // set download location
+    // set download path
     chrome.downloads.onDeterminingFilename.addListener(function(downloadItem, suggest) {
       suggest({
         filename: this.getDownloadPath() + downloadItem.filename
       });
+    }.bind(this));
+
+    // get previous download paths
+    chrome.storage.local.get(CUSTOM_DOWNLOAD_PATHS_KEY, function(storage) {
+      if (storage[CUSTOM_DOWNLOAD_PATHS_KEY]) {
+        var paths = JSON.parse(storage[CUSTOM_DOWNLOAD_PATHS_KEY]);
+        if (Object.keys(paths).length > 0) {
+          console.log('Setting saved download paths', storage, paths);
+          this.setState({
+            savedCustomDownloadPaths: paths
+          });
+        }
+      }
     }.bind(this));
   },
   isDownloading: function() {
@@ -67,7 +72,7 @@ const SaveImageDialog = React.createClass({
       );
   },
   onClickDownload: function() {
-    this.getTabsWithImages(function(tabs) {
+    getTabsWithImages(function(tabs) {
       const statuses = _.reduce(tabs, function(memo, tab) {
         memo[tab.id] = PENDING;
         return memo;
@@ -97,7 +102,31 @@ const SaveImageDialog = React.createClass({
         );
       }.bind(this));
     }.bind(this));
+
+    this.saveDownloadPath();
   },
+
+  saveDownloadPath: function() {
+    // save download location, if customized
+    if (this.state.useCustomDownloadPath) {
+      let obj = {};
+
+      const newSavedCustomDownloadPaths = this.state.savedCustomDownloadPaths.concat([{
+        path: this.state.customDownloadPath,
+        lastUsage: new Date(),
+      }]);
+
+      this.setState(update(this.state, {
+        savedCustomDownloadPaths: { $set: newSavedCustomDownloadPaths },
+      }));
+
+      obj[CUSTOM_DOWNLOAD_PATHS_KEY] = JSON.stringify(newSavedCustomDownloadPaths);
+      chrome.storage.local.set(obj, function() {
+        console.log('Saved download path', obj);
+      });
+    }
+  },
+
   hasImages: function() {
     return this.imageCount() > 0;
   },
@@ -111,36 +140,36 @@ const SaveImageDialog = React.createClass({
   imageCount: function() {
     return this.state.tabList.length;
   },
+  getDownloadOptions: function(input) {
+    const sanitizedPath = sanitizeFilePath(input);
+    const customOptions = this.state.savedCustomDownloadPaths.map((path) => {
+      return { label: path.path, value: path.path }
+    });
+    const newFolderOptions = (sanitizedPath && sanitizedPath.length > 0) ?
+      [{ label: `Create new subfolder ${sanitizedPath}`, value: sanitizedPath }] : [];
+
+    return [{ label: 'Default download location', value: 'default' }]
+      .concat(customOptions)
+      .concat(newFolderOptions);
+  },
   renderDownloadOptions: function() {
     return (
       <form id="download-options" onSubmit={this.onSubmitDownloadOptions}>
         <ul>
           <li>
-            <input
-              id="path-option-default"
-              type="radio"
+            <label className="small-label">Download location</label>
+            <Select
               value="default"
-              checked={!this.state.useCustomDownloadLocation} onChange={this.onChangeCustomDownloadLocation}
+              asyncOptions={(input, callback) => {
+                console.log('async', this.getDownloadOptions(input));
+                callback(null, {
+                  options: this.getDownloadOptions(input),
+                  complete: false,
+                });
+              }}
+              filterOption={(option) => option}
+              onChange={this.onChangeDownloadPath}
             />
-            <label htmlFor="path-option-default">Default download location</label>
-          </li>
-          <li>
-            <input
-              id="path-option-custom"
-              type="radio"
-              value="custom"
-              checked={this.state.useCustomDownloadLocation} onChange={this.onChangeCustomDownloadLocation}
-            />
-            <div className="path-wrapper">
-              <label htmlFor="path-option-custom">Subfolder within default location</label>
-              <input
-                id="path"
-                type="text"
-                value={this.state.customDownloadLocation}
-                disabled={!this.state.useCustomDownloadLocation}
-                onChange={this.onChangeCustomDownloadLocationPath}
-              />
-            </div>
           </li>
         </ul>
       </form>
@@ -157,16 +186,9 @@ const SaveImageDialog = React.createClass({
   onClickDismiss: function() {
     window.close();
   },
-  onChangeCustomDownloadLocation: function(event) {
-    if (event.target.value === 'default') {
-      this.setState({ useCustomDownloadLocation: false });
-    } else {
-      this.setState({ useCustomDownloadLocation: true });
-    }
-  },
-  onChangeCustomDownloadLocationPath: function(event) {
+  onChangeDownloadPath: function(newPath) {
     this.setState({
-      customDownloadLocation: event.target.value
+      customDownloadPath: newPath
     });
   },
   render: function() {
@@ -196,4 +218,4 @@ const SaveImageDialog = React.createClass({
   }
 });
 
-module.exports = SaveImageDialog;
+export default SaveImageDialog;

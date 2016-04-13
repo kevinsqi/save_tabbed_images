@@ -111,7 +111,6 @@ button:hover {
   border-radius: 0 0 5px 5px;
 }
 #download-options li {
-  overflow: hidden;
   padding: 2px 0;
 }
 #download-options input[type="radio"] {
@@ -128,4 +127,10 @@ button:hover {
 }
 .path-wrapper input:disabled {
   opacity: 0.3;
+}
+
+.small-label {
+  text-transform: uppercase;
+  font-size: 11px;
+  color: #888;
 }
