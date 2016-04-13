@@ -7,16 +7,35 @@ import moment from 'moment';
 const PENDING = 'pending';
 const COMPLETE = 'complete';
 
-const SaveImageDialog = React.createClass({
-  getInitialState: function() {
-    return {
+class SaveImageDialog extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
       tabList: [],
       downloadStatuses: {},
       useCustomDownloadLocation: false,
-      customDownloadLocation: 'SaveTabbedImages-' + moment().format('YYYY-MM-DD')
+      customDownloadLocation: 'SaveTabbedImages-' + moment().format('YYYY-MM-DD'),
     };
-  },
-  getTabsWithImages: function(callback) {
+
+    this.getTabsWithImages = this.getTabsWithImages.bind(this);
+    this.getCompletedTabs = this.getCompletedTabs.bind(this);
+    this.getDownloadPath = this.getDownloadPath.bind(this);
+    this.isDownloading = this.isDownloading.bind(this);
+    this.isComplete = this.isComplete.bind(this);
+    this.onClickDownload = this.onClickDownload.bind(this);
+    this.hasImages = this.hasImages.bind(this);
+    this.renderTabListItem = this.renderTabListItem.bind(this);
+    this.imageCount = this.imageCount.bind(this);
+    this.renderDownloadOptions = this.renderDownloadOptions.bind(this);
+    this.onSubmitDownloadOptions = this.onSubmitDownloadOptions.bind(this);
+    this.onClickCloseDownloadedTabs = this.onClickCloseDownloadedTabs.bind(this);
+    this.onClickDismiss = this.onClickDismiss.bind(this);
+    this.onChangeCustomDownloadLocation = this.onChangeCustomDownloadLocation.bind(this);
+    this.onChangeCustomDownloadLocationPath = this.onChangeCustomDownloadLocationPath.bind(this);
+  }
+
+  getTabsWithImages(callback) {
     chrome.tabs.query(
       { currentWindow: true },
       function(tabs) {
@@ -26,21 +45,24 @@ const SaveImageDialog = React.createClass({
         });
       }
     );
-  },
-  getCompletedTabs: function() {
+  }
+
+  getCompletedTabs() {
     return _.compact(_.map(this.state.downloadStatuses, function(status, tabID) {
       return (status === COMPLETE) ? parseInt(tabID, 10) : null;
     }));
-  },
-  getDownloadPath: function() {
+  }
+
+  getDownloadPath() {
     console.log('getDownloadPath', this.state);
     if (this.state.useCustomDownloadLocation) {
       return this.state.customDownloadLocation + '/';
     } else {
       return '';
     }
-  },
-  componentDidMount: function() {
+  }
+
+  componentDidMount() {
     // get image list
     this.getTabsWithImages(function(tabs) {
       this.setState({ tabList: tabs });
@@ -52,21 +74,24 @@ const SaveImageDialog = React.createClass({
         filename: this.getDownloadPath() + downloadItem.filename
       });
     }.bind(this));
-  },
-  isDownloading: function() {
+  }
+
+  isDownloading() {
     return _.any(
       _.values(this.state.downloadStatuses),
       function(status) { return status === PENDING; }
     );
-  },
-  isComplete: function() {
+  }
+
+  isComplete() {
     return _.size(this.state.downloadStatuses) > 0 &&
       _.all(
         _.values(this.state.downloadStatuses),
         function(status) { return status === COMPLETE; }
       );
-  },
-  onClickDownload: function() {
+  }
+
+  onClickDownload() {
     this.getTabsWithImages(function(tabs) {
       const statuses = _.reduce(tabs, function(memo, tab) {
         memo[tab.id] = PENDING;
@@ -97,21 +122,25 @@ const SaveImageDialog = React.createClass({
         );
       }.bind(this));
     }.bind(this));
-  },
-  hasImages: function() {
+  }
+
+  hasImages() {
     return this.imageCount() > 0;
-  },
-  renderTabListItem: function(tab) {
+  }
+
+  renderTabListItem(tab) {
     return (
       <li key={tab.id} className={this.state.downloadStatuses[tab.id]}>
         <a href={tab.url}>{tab.url}</a>
       </li>
     );
-  },
-  imageCount: function() {
+  }
+
+  imageCount() {
     return this.state.tabList.length;
-  },
-  renderDownloadOptions: function() {
+  }
+
+  renderDownloadOptions() {
     return (
       <form id="download-options" onSubmit={this.onSubmitDownloadOptions}>
         <ul>
@@ -145,31 +174,37 @@ const SaveImageDialog = React.createClass({
         </ul>
       </form>
     );
-  },
-  onSubmitDownloadOptions: function(event) {
+  }
+
+  onSubmitDownloadOptions(event) {
     event.preventDefault();
     this.onClickDownload();
-  },
-  onClickCloseDownloadedTabs: function() {
+  }
+
+  onClickCloseDownloadedTabs() {
     chrome.tabs.remove(this.getCompletedTabs());
     this.onClickDismiss();
-  },
-  onClickDismiss: function() {
+  }
+
+  onClickDismiss() {
     window.close();
-  },
-  onChangeCustomDownloadLocation: function(event) {
+  }
+
+  onChangeCustomDownloadLocation(event) {
     if (event.target.value === 'default') {
       this.setState({ useCustomDownloadLocation: false });
     } else {
       this.setState({ useCustomDownloadLocation: true });
     }
-  },
-  onChangeCustomDownloadLocationPath: function(event) {
+  }
+
+  onChangeCustomDownloadLocationPath(event) {
     this.setState({
       customDownloadLocation: event.target.value
     });
-  },
-  render: function() {
+  }
+
+  render() {
     const content = this.hasImages() ? (
       <div>
         <button id="download" disabled={this.isDownloading()} onClick={this.onClickDownload}>
@@ -194,6 +229,6 @@ const SaveImageDialog = React.createClass({
       </div>
     );
   }
-});
+}
 
 export default SaveImageDialog;
