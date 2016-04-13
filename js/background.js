@@ -44,18 +44,18 @@ chrome.runtime.onMessage.addListener(
     if (request.type === 'checktabs') {
       const tabsToReturn = [];
       const tabs = request.tabs;
-      let match;
       for (let i = 0; i < tabs.length; i++) {
         const tab = tabs[i];
         const tabObj = { id: tab.id, url: tab.url };
+        const urlFileExtension = tab.url.match(/.+\.([^?]+)(\?|$)/);  // regex captures extension
         if (tabsWithImages[tab.id] === true) {
           tabsToReturn.push(tabObj);
         } else if (tabsWithImages[tab.id] === false) {
           // Tab is not an image, do nothing.
-        } else if (match = tab.url.match(/.+\.([^?]+)(\?|$)/)) {  // regex captures the URL's file extension
+        } else if (urlFileExtension) {
           // If we didn't get it from MIME checking (i.e. if extension had been disabled or just installed), check the file extension as a fallback.
           // Can create false positives, but better than overlooking files.
-          const ext = match[1].toLowerCase();
+          const ext = urlFileExtension[1].toLowerCase();
           if (imageExtensions[ext]) {
             tabsToReturn.push(tabObj);
           }
