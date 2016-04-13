@@ -6,6 +6,7 @@
     "indent": [2, 2, {"SwitchCase": 1}],
     "key-spacing": 0,
     "no-else-return": 1,
+    "object-shorthand": 0,
     "react/jsx-boolean-value": [2, "always"],
     "react/sort-comp": 1,
     "space-before-function-paren": 0,
