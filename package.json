@@ -3,8 +3,11 @@
   "private": true,
   "description": "Save Tabbed Images Chrome Extension",
   "scripts": {
-    "watch": "./node_modules/.bin/webpack --watch",
-    "lint": "eslint --ext .js,.jsx ./js"
+    "build": "webpack -p",
+    "clean": "rm -f ./dist/js/*",
+    "lint": "eslint --ext .js,.jsx ./js",
+    "package": "npm run clean && npm run build && zip -r package.zip ./dist",
+    "watch": "webpack --watch"
   },
   "dependencies": {
     "dateformat": "^1.0.12",
