@@ -2,7 +2,7 @@ import React from 'react';
 import chrome from 'chrome';
 import pluralize from 'pluralize';
 import _ from 'underscore';
-import moment from 'moment';
+import dateFormat from 'dateformat';
 
 const PENDING = 'pending';
 const COMPLETE = 'complete';
@@ -15,7 +15,7 @@ class SaveImageDialog extends React.Component {
       tabList: [],
       downloadStatuses: {},
       useCustomDownloadLocation: false,
-      customDownloadLocation: 'SaveTabbedImages-' + moment().format('YYYY-MM-DD'),
+      customDownloadLocation: `SaveTabbedImages-${dateFormat(new Date(), "yyyy-mm-dd-HHMMss")}`,
     };
 
     this.getTabsWithImages = this.getTabsWithImages.bind(this);
