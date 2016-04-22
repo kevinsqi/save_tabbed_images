@@ -28,7 +28,7 @@ npm run lint
 
 ### Packaging for Chrome web store release
 
-* Update version in package.json
+* Update version in dist/manifest.json
 * Summarize the changes made from the last release (list pull requests) in CHANGELOG.md
 * Create git tag with `git tag x.x.x` and push it with `git push origin --tags`
 * Build a production version of webpack bundle with `npm run package`
