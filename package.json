@@ -1,5 +1,6 @@
 {
   "name": "save_tabbed_images",
+  "version": "0.4.1",
   "private": true,
   "description": "Save Tabbed Images Chrome Extension",
   "scripts": {

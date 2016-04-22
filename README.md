@@ -28,10 +28,12 @@ npm run lint
 
 ### Packaging for Chrome web store release
 
+* Update version in package.json
+* Summarize the changes made from the last release (list pull requests) in CHANGELOG.md
+* Create git tag with `git tag x.x.x`
 * Build a production version of webpack bundle with `npm run package`
 * Create a .zip file of the `dist` folder named `save_tabbed_images_<version>.zip`
-* [Create a new release in github](https://github.com/iqnivek/save_tabbed_images/releases) and attach the .zip file
-* Summarize the changes made from the last release (list pull requests) in the description. Also add these changes to CHANGELOG.md.
+* [Create a new release in github](https://github.com/iqnivek/save_tabbed_images/releases) and attach the .zip file. In the description, add the summary from CHANGELOG.md.
 * Upload the .zip file to the chrome web store
 
 ### License
