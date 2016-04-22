@@ -1,5 +1,6 @@
 module.exports = {
   context: __dirname,
+  devtool: 'cheap-module-source-map',
   entry: {
     popup: "./src/popup",
     background: "./src/background"
