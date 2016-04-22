@@ -5,7 +5,7 @@
   "description": "Save Tabbed Images Chrome Extension",
   "scripts": {
     "build": "webpack -p",
-    "clean": "rm -f ./dist/js/*",
+    "clean": "rm -f ./dist/js/* package.zip",
     "lint": "eslint --ext .js,.jsx ./js",
     "package": "npm run clean && npm run build && zip -r package.zip ./dist",
     "watch": "webpack --watch"
