@@ -72,24 +72,23 @@ button:hover {
 /*
  * Components
  */
-#links {
+#files {
   font-size: 0.9em;
   overflow-y: auto;
   max-height: 15em;
-  padding: 1em;
 }
-#links li {
+#files li {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-#links li a {
+#files li a {
   color: #aaa;
 }
-#links li.error a {
+#files li.error a {
   color: #f66;
 }
-#links li.error a:before {
+#files li.error a:before {
   content: "Error";
   background: #f66;
   color: #fff;

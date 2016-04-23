@@ -216,17 +216,21 @@ class SaveImageDialog extends React.Component {
   }
 
   renderFileList() {
-    if (this.state.showFileList) {
-      const incompleteFiles = _.filter(this.state.tabList, (file) => {
-        return this.state.downloadStatuses[file.id] !== COMPLETE;
-      });
-      return (
-        <ul id="links">
-          {incompleteFiles.map(this.renderTabListItem)}
-        </ul>
-      );
+    if (!this.state.showFileList) {
+      return null;
     }
-    return null;
+    if (this.state.showFileList && this.isComplete()) {
+      return <p className="padding">All files downloaded!</p>;
+    }
+
+    const incompleteFiles = _.filter(this.state.tabList, (file) => {
+      return this.state.downloadStatuses[file.id] !== COMPLETE;
+    });
+    return (
+      <ul id="files" className="padding">
+        {incompleteFiles.map(this.renderTabListItem)}
+      </ul>
+    );
   }
 
   renderCloseButton() {
