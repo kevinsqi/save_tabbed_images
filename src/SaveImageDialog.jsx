@@ -3,6 +3,7 @@ import chrome from 'chrome';
 import pluralize from 'pluralize';
 import _ from 'underscore';
 import dateFormat from 'dateformat';
+import { getTabsWithImages } from './backgroundHelpers';
 
 const PENDING = 'pending';
 const COMPLETE = 'complete';
@@ -19,7 +20,6 @@ class SaveImageDialog extends React.Component {
       customDownloadLocation: `SaveTabbedImages-${dateFormat(new Date(), "yyyy-mm-dd-HHMMss")}`,
     };
 
-    this.getTabsWithImages = this.getTabsWithImages.bind(this);
     this.getCompletedTabs = this.getCompletedTabs.bind(this);
     this.getDownloadPath = this.getDownloadPath.bind(this);
     this.isDownloading = this.isDownloading.bind(this);
@@ -35,18 +35,6 @@ class SaveImageDialog extends React.Component {
     this.onClickDismiss = this.onClickDismiss.bind(this);
     this.onChangeCustomDownloadLocation = this.onChangeCustomDownloadLocation.bind(this);
     this.onChangeCustomDownloadLocationPath = this.onChangeCustomDownloadLocationPath.bind(this);
-  }
-
-  getTabsWithImages(callback) {
-    chrome.tabs.query(
-      { currentWindow: true },
-      (tabs) => {
-        // Query background process for which tabs are images
-        chrome.runtime.sendMessage({ type: 'checktabs', tabs: tabs }, (response) => {
-          callback(response.tabs);
-        });
-      }
-    );
   }
 
   getCompletedTabs() {
@@ -66,7 +54,7 @@ class SaveImageDialog extends React.Component {
 
   componentDidMount() {
     // get image list
-    this.getTabsWithImages((tabs) => {
+    getTabsWithImages((tabs) => {
       this.setState({ tabList: tabs });
     });
 
@@ -94,7 +82,7 @@ class SaveImageDialog extends React.Component {
   }
 
   onClickDownload() {
-    this.getTabsWithImages((tabs) => {
+    getTabsWithImages((tabs) => {
       const statuses = _.reduce(tabs, (memo, tab) => {
         memo[tab.id] = PENDING;
         return memo;
