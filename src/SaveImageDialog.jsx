@@ -141,7 +141,11 @@ class SaveImageDialog extends React.Component {
 
   renderDownloadOptions() {
     return (
-      <form id="download-options" onSubmit={this.onSubmitDownloadOptions}>
+      <form
+        id="download-options"
+        className="padding background-gray"
+        onSubmit={this.onSubmitDownloadOptions}
+      >
         <ul>
           <li>
             <input
@@ -209,26 +213,13 @@ class SaveImageDialog extends React.Component {
     });
   }
 
-  renderFileListToggle() {
-    return (
-      <button onClick={this.onToggleFileList}>{this.state.showFileList ? 'Hide image list' : 'Show image list'}</button>
-    );
-  }
-
   renderFileList() {
     if (!this.state.showFileList) {
       return null;
     }
-    if (this.state.showFileList && this.isComplete()) {
-      return <p className="padding">All files downloaded!</p>;
-    }
-
-    const incompleteFiles = _.filter(this.state.tabList, (file) => {
-      return this.state.downloadStatuses[file.id] !== COMPLETE;
-    });
     return (
-      <ul id="files" className="padding">
-        {incompleteFiles.map(this.renderTabListItem)}
+      <ul id="files" className="background-gray padding">
+        {this.state.tabList.map(this.renderTabListItem)}
       </ul>
     );
   }
@@ -247,7 +238,9 @@ class SaveImageDialog extends React.Component {
         </button>
 
         {this.renderDownloadOptions()}
-        {this.renderFileListToggle()}
+        <div className="progress" title="Click to show image list" onClick={this.onToggleFileList}>
+          <progress max={this.imageCount()} value={this.getCompletedTabs().length}></progress>
+        </div>
         {this.renderFileList()}
         {this.renderCloseButton()}
       </div>

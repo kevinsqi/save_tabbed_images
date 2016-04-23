@@ -68,6 +68,12 @@ button:hover {
 .align-center {
   text-align: center;
 }
+.align-right {
+  text-align: right;
+}
+.background-gray {
+  background: #f3f3f3;
+}
 
 /*
  * Components
@@ -81,9 +87,18 @@ button:hover {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  padding: 1px 0;
 }
 #files li a {
   color: #aaa;
+}
+#files li.complete a:before {
+  content: "Done";
+  background: #43a0de;
+  color: #fff;
+  display: inline-block;
+  padding: 0.2em 0.5em;
+  margin-right: 0.5em;
 }
 #files li.error a {
   color: #f66;
@@ -101,10 +116,6 @@ button:hover {
 }
 #download:hover {
   background: #175681;
-}
-#download-options {
-  background: #f3f3f3;
-  padding: 1em;
 }
 #download-options li {
   padding: 3px 0;
@@ -127,3 +138,28 @@ button:hover {
   opacity: 0.3;
 }
 
+button.icon-button {
+  background: #fff;
+  padding: 4px;
+  width: auto;
+  font-size: 0;
+}
+button.icon-button img {
+  width: 12px;
+}
+
+.progress {
+  height: 16px;
+  cursor: pointer;
+}
+.progress progress {
+  -webkit-appearance: none; /* reset default appearance */
+  width: 100%;
+  height: 100%;
+}
+.progress progress::-webkit-progress-bar {
+  background: #fff;
+}
+.progress progress::-webkit-progress-value {
+  background: #43a0de;
+}
