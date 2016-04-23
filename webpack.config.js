@@ -2,7 +2,7 @@ module.exports = {
   context: __dirname,
   devtool: 'cheap-module-source-map',
   entry: {
-    popup: "./src/popup",
+    index: "./src/index",
     background: "./src/background"
   },
   output: {
