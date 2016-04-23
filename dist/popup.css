@@ -33,7 +33,9 @@ input[type="radio"] {
   margin-top: 3px;
 }
 input[type="text"] {
-  padding: 5px 7px;
+  padding: 7px 9px;
+  font-size: 13px;
+  outline: none;
 }
 #links {
   font-size: 0.8em;
@@ -119,7 +121,9 @@ button:hover {
 }
 .path-wrapper input {
   width: 100%;
-  margin-top: 5px;
+  margin-top: 6px;
+  border: 1px solid #aaa;
+  border-radius: 3px;
 }
 .path-wrapper input:disabled {
   opacity: 0.3;
