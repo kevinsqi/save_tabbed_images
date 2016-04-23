@@ -1,4 +1,4 @@
-![save tabbed images icon](https://github.com/iqnivek/save_tabbed_images/raw/master/dist/img/icon48.png)
+![save tabbed images icon](/dist/img/icon128.png)
 
 # Save Tabbed Images
 
@@ -6,7 +6,7 @@ A simple and easy-to-use chrome extension to download all images opened as tabs 
 
 [**Get the extension at the Chrome web store**](https://chrome.google.com/webstore/detail/save-tabbed-images/hhcoikfhkkadkgklepjkfgafmjoggefh).
 
-![Demo](https://github.com/iqnivek/save_tabbed_images/raw/master/assets/screenshots/demo.gif)
+<img src="/assets/screenshots/demo.gif" alt="demo gif" width="250px" />
 
 ## Development
 
