@@ -6,6 +6,7 @@ import _ from 'underscore';
 
 import { getTabsWithImages } from './backgroundHelpers';
 import DownloadOptions from './DownloadOptions';
+import NoImagesMessage from './NoImagesMessage';
 
 const PENDING = 'pending';
 const COMPLETE = 'complete';
@@ -30,7 +31,6 @@ class Extension extends React.Component {
     this.onClickDownload = this.onClickDownload.bind(this);
     this.onSubmitDownloadOptions = this.onSubmitDownloadOptions.bind(this);
     this.onClickCloseDownloadedTabs = this.onClickCloseDownloadedTabs.bind(this);
-    this.onClickDismiss = this.onClickDismiss.bind(this);
   }
 
   getCompletedTabs() {
@@ -42,7 +42,6 @@ class Extension extends React.Component {
   }
 
   componentDidMount() {
-    // get image list
     getTabsWithImages((tabs) => {
       this.setState({ tabList: tabs });
     });
@@ -165,22 +164,10 @@ class Extension extends React.Component {
         {this.renderCloseButton()}
       </div>
     ) : (
-      <div>
-        <div className="align-center padding">
-          <img src="img/icon48.png" alt="icon" />
-          <h1>Save Tabbed Images</h1>
-          <p>No images opened in current window.</p>
-          <p>Right click an image and select "Open Image in New Tab" to get started.</p>
-        </div>
-        <button onClick={this.onClickDismiss}>Got it</button>
-      </div>
+      <NoImagesMessage onClickDismiss={this.onClickDismiss} />
     );
 
-    return (
-      <div className="save-image-dialog">
-        {content}
-      </div>
-    );
+    return <div>{content}</div>;
   }
 }
 
