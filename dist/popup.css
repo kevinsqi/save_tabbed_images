@@ -107,8 +107,7 @@ button:hover {
   margin-bottom: 1em;
 }
 #download-options li {
-  overflow: hidden;
-  padding: 2px 0;
+  padding: 3px 0;
 }
 #download-options input[type="radio"] {
   width: 15px;
