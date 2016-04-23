@@ -10,7 +10,7 @@ import DownloadOptions from './DownloadOptions';
 const PENDING = 'pending';
 const COMPLETE = 'complete';
 
-class SaveImageDialog extends React.Component {
+class Extension extends React.Component {
   constructor(props) {
     super(props);
 
@@ -184,4 +184,4 @@ class SaveImageDialog extends React.Component {
   }
 }
 
-export default SaveImageDialog;
+export default Extension;

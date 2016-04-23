@@ -1,5 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import SaveImageDialog from './SaveImageDialog';
+import Extension from './Extension';
 
-ReactDOM.render(<SaveImageDialog />, document.getElementById('app'));
+ReactDOM.render(<Extension />, document.getElementById('app'));
