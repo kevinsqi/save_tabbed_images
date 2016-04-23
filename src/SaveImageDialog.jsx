@@ -17,7 +17,7 @@ class SaveImageDialog extends React.Component {
       downloadStatuses: {},
       showFileList: false,
       useCustomDownloadLocation: false,
-      customDownloadLocation: `SaveTabbedImages-${dateFormat(new Date(), "yyyy-mm-dd-HHMMss")}`,
+      customDownloadLocation: `SaveTabbedImages-${dateFormat(new Date(), 'yyyy-mm-dd-HHMMss')}`,
     };
 
     this.getCompletedTabs = this.getCompletedTabs.bind(this);
