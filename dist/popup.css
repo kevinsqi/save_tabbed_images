@@ -21,12 +21,10 @@ h1 {
 ul {
   list-style-type: none;
   padding-left: 0;
+  margin: 0;
 }
 a {
   text-decoration: none;
-}
-ul {
-  margin: 0;
 }
 p {
   margin: 0;
@@ -75,9 +73,10 @@ button:hover {
  * Components
  */
 #links {
-  font-size: 0.8em;
+  font-size: 0.9em;
   overflow-y: auto;
-  max-height: 20em;
+  max-height: 15em;
+  padding: 1em;
 }
 #links li {
   overflow: hidden;
@@ -87,19 +86,8 @@ button:hover {
 #links li a {
   color: #aaa;
 }
-#links li.complete a {
-  color: #999;
-}
 #links li.error a {
   color: #f66;
-}
-#links li.complete a:before {
-  content: "Done";
-  background: #43a0de;
-  color: #fff;
-  display: inline-block;
-  padding: 0 0.5em;
-  margin-right: 0.5em;
 }
 #links li.error a:before {
   content: "Error";
@@ -115,16 +103,9 @@ button:hover {
 #download:hover {
   background: #175681;
 }
-#dismiss {
-  margin-top: 1em;
-}
-#close-tabs {
-  margin-top: 1em;
-}
 #download-options {
   background: #f3f3f3;
   padding: 1em;
-  margin-bottom: 1em;
 }
 #download-options li {
   padding: 3px 0;

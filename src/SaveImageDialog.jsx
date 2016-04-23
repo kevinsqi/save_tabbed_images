@@ -14,6 +14,7 @@ class SaveImageDialog extends React.Component {
     this.state = {
       tabList: [],
       downloadStatuses: {},
+      showFileList: false,
       useCustomDownloadLocation: false,
       customDownloadLocation: `SaveTabbedImages-${dateFormat(new Date(), "yyyy-mm-dd-HHMMss")}`,
     };
@@ -23,11 +24,12 @@ class SaveImageDialog extends React.Component {
     this.getDownloadPath = this.getDownloadPath.bind(this);
     this.isDownloading = this.isDownloading.bind(this);
     this.isComplete = this.isComplete.bind(this);
-    this.onClickDownload = this.onClickDownload.bind(this);
     this.hasImages = this.hasImages.bind(this);
-    this.renderTabListItem = this.renderTabListItem.bind(this);
     this.imageCount = this.imageCount.bind(this);
+    this.renderTabListItem = this.renderTabListItem.bind(this);
     this.renderDownloadOptions = this.renderDownloadOptions.bind(this);
+    this.onToggleFileList = this.onToggleFileList.bind(this);
+    this.onClickDownload = this.onClickDownload.bind(this);
     this.onSubmitDownloadOptions = this.onSubmitDownloadOptions.bind(this);
     this.onClickCloseDownloadedTabs = this.onClickCloseDownloadedTabs.bind(this);
     this.onClickDismiss = this.onClickDismiss.bind(this);
@@ -201,17 +203,49 @@ class SaveImageDialog extends React.Component {
     });
   }
 
+  onToggleFileList() {
+    this.setState({
+      showFileList: !this.state.showFileList,
+    });
+  }
+
+  renderFileListToggle() {
+    return (
+      <button onClick={this.onToggleFileList}>{this.state.showFileList ? 'Hide image list' : 'Show image list'}</button>
+    );
+  }
+
+  renderFileList() {
+    if (this.state.showFileList) {
+      const incompleteFiles = _.filter(this.state.tabList, (file) => {
+        return this.state.downloadStatuses[file.id] !== COMPLETE;
+      });
+      return (
+        <ul id="links">
+          {incompleteFiles.map(this.renderTabListItem)}
+        </ul>
+      );
+    }
+    return null;
+  }
+
+  renderCloseButton() {
+    return this.isComplete() ? (
+      <button id="close-tabs" onClick={this.onClickCloseDownloadedTabs}>Close Downloaded Tabs</button>
+    ) : null;
+  }
+
   render() {
     const content = this.hasImages() ? (
       <div>
         <button id="download" disabled={this.isDownloading()} onClick={this.onClickDownload}>
           Download {pluralize('image', this.imageCount(), true)}
         </button>
+
         {this.renderDownloadOptions()}
-        <ul id="links">
-          {this.state.tabList.map(this.renderTabListItem)}
-        </ul>
-        {this.isComplete() ? <button id="close-tabs" onClick={this.onClickCloseDownloadedTabs}>Close Downloaded Tabs</button> : null}
+        {this.renderFileListToggle()}
+        {this.renderFileList()}
+        {this.renderCloseButton()}
       </div>
     ) : (
       <div>
@@ -221,7 +255,7 @@ class SaveImageDialog extends React.Component {
           <p>No images opened in current window.</p>
           <p>Right click an image and select "Open Image in New Tab" to get started.</p>
         </div>
-        <button id="dismiss" onClick={this.onClickDismiss}>Got it</button>
+        <button onClick={this.onClickDismiss}>Got it</button>
       </div>
     );
 
