@@ -74,12 +74,14 @@ button:hover {
 .background-gray {
   background: #f3f3f3;
 }
+.text-smaller {
+  font-size: 0.9em;
+}
 
 /*
  * Components
  */
 #files {
-  font-size: 0.9em;
   overflow-y: auto;
   max-height: 15em;
 }
@@ -149,17 +151,8 @@ button.icon-button img {
 }
 
 .progress {
-  height: 16px;
   cursor: pointer;
 }
-.progress progress {
-  -webkit-appearance: none; /* reset default appearance */
-  width: 100%;
-  height: 100%;
-}
-.progress progress::-webkit-progress-bar {
-  background: #fff;
-}
-.progress progress::-webkit-progress-value {
-  background: #43a0de;
+.progress-count {
+  font-size: 1.6em;
 }

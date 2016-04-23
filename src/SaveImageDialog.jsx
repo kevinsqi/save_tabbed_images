@@ -218,7 +218,7 @@ class SaveImageDialog extends React.Component {
       return null;
     }
     return (
-      <ul id="files" className="background-gray padding">
+      <ul id="files" className="background-gray padding text-smaller">
         {this.state.tabList.map(this.renderTabListItem)}
       </ul>
     );
@@ -238,8 +238,11 @@ class SaveImageDialog extends React.Component {
         </button>
 
         {this.renderDownloadOptions()}
-        <div className="progress" title="Click to show image list" onClick={this.onToggleFileList}>
-          <progress max={this.imageCount()} value={this.getCompletedTabs().length}></progress>
+        <div className="progress align-center padding" onClick={this.onToggleFileList}>
+          <div className="progress-count">
+            {this.getCompletedTabs().length} of {this.imageCount()}
+          </div>
+          <div className="text-smaller">images downloaded</div>
         </div>
         {this.renderFileList()}
         {this.renderCloseButton()}
