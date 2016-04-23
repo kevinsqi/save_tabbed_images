@@ -238,7 +238,7 @@ class SaveImageDialog extends React.Component {
         </button>
 
         {this.renderDownloadOptions()}
-        <div className="progress align-center padding" onClick={this.onToggleFileList}>
+        <div className="progress align-center padding" title="Click to see image list" onClick={this.onToggleFileList}>
           <div className="progress-count">
             {this.getCompletedTabs().length} of {this.imageCount()}
           </div>
