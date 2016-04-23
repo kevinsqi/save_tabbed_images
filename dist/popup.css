@@ -1,3 +1,7 @@
+/*
+ * Overrides
+ */
+
 * {
   box-sizing: border-box;
   color: #888;
@@ -37,6 +41,39 @@ input[type="text"] {
   font-size: 13px;
   outline: none;
 }
+button {
+  width: 100%;
+  background: #aaa;
+  color: #fff;
+  border: none;
+  outline: none;
+  padding: 1em 0.5em;
+  font-size: 1.1em;
+  cursor: pointer;
+}
+button span {
+  color: #fff;
+}
+button:disabled {
+  opacity: 0.3;
+}
+button:hover {
+  background: #888;
+}
+
+/*
+ * Reusable classes
+ */
+.padding {
+  padding: 1em;
+}
+.align-center {
+  text-align: center;
+}
+
+/*
+ * Components
+ */
 #links {
   font-size: 0.8em;
   overflow-y: auto;
@@ -71,25 +108,6 @@ input[type="text"] {
   display: inline-block;
   padding: 0 0.5em;
   margin-right: 0.5em;
-}
-button {
-  width: 100%;
-  background: #aaa;
-  color: #fff;
-  border: none;
-  outline: none;
-  padding: 1em 0.5em;
-  font-size: 1.1em;
-  cursor: pointer;
-}
-button span {
-  color: #fff;
-}
-button:disabled {
-  opacity: 0.3;
-}
-button:hover {
-  background: #888;
 }
 #download {
   background: #43a0de;
@@ -128,6 +146,4 @@ button:hover {
 .path-wrapper input:disabled {
   opacity: 0.3;
 }
-.align-center {
-  text-align: center;
-}
+

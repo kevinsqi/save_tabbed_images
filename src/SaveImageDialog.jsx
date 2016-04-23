@@ -215,7 +215,7 @@ class SaveImageDialog extends React.Component {
       </div>
     ) : (
       <div>
-        <div className="align-center">
+        <div className="align-center padding">
           <img src="img/icon48.png" alt="icon" />
           <h1>Save Tabbed Images</h1>
           <p>No images opened in current window.</p>
