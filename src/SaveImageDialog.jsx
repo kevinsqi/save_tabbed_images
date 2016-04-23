@@ -3,8 +3,9 @@ import update from 'react-addons-update';
 import chrome from 'chrome';
 import pluralize from 'pluralize';
 import _ from 'underscore';
-import dateFormat from 'dateformat';
+
 import { getTabsWithImages } from './backgroundHelpers';
+import DownloadOptions from './DownloadOptions';
 
 const PENDING = 'pending';
 const COMPLETE = 'complete';
@@ -17,25 +18,19 @@ class SaveImageDialog extends React.Component {
       tabList: [],
       downloadStatuses: {},
       showFileList: false,
-      useCustomDownloadLocation: false,
-      customDownloadLocation: `SaveTabbedImages-${dateFormat(new Date(), 'yyyy-mm-dd-HHMMss')}`,
     };
 
     this.getCompletedTabs = this.getCompletedTabs.bind(this);
-    this.getDownloadPath = this.getDownloadPath.bind(this);
     this.isDownloading = this.isDownloading.bind(this);
     this.isComplete = this.isComplete.bind(this);
     this.hasImages = this.hasImages.bind(this);
     this.imageCount = this.imageCount.bind(this);
     this.renderTabListItem = this.renderTabListItem.bind(this);
-    this.renderDownloadOptions = this.renderDownloadOptions.bind(this);
     this.onToggleFileList = this.onToggleFileList.bind(this);
     this.onClickDownload = this.onClickDownload.bind(this);
     this.onSubmitDownloadOptions = this.onSubmitDownloadOptions.bind(this);
     this.onClickCloseDownloadedTabs = this.onClickCloseDownloadedTabs.bind(this);
     this.onClickDismiss = this.onClickDismiss.bind(this);
-    this.onChangeCustomDownloadLocation = this.onChangeCustomDownloadLocation.bind(this);
-    this.onChangeCustomDownloadLocationPath = this.onChangeCustomDownloadLocationPath.bind(this);
   }
 
   getCompletedTabs() {
@@ -46,24 +41,10 @@ class SaveImageDialog extends React.Component {
     );
   }
 
-  getDownloadPath() {
-    if (this.state.useCustomDownloadLocation) {
-      return this.state.customDownloadLocation + '/';
-    }
-    return '';
-  }
-
   componentDidMount() {
     // get image list
     getTabsWithImages((tabs) => {
       this.setState({ tabList: tabs });
-    });
-
-    // set download location
-    chrome.downloads.onDeterminingFilename.addListener((downloadItem, suggest) => {
-      suggest({
-        filename: this.getDownloadPath() + downloadItem.filename
-      });
     });
   }
 
@@ -127,46 +108,6 @@ class SaveImageDialog extends React.Component {
     return this.state.tabList.length;
   }
 
-  renderDownloadOptions() {
-    return (
-      <form
-        id="download-options"
-        className="padding background-gray"
-        onSubmit={this.onSubmitDownloadOptions}
-      >
-        <ul>
-          <li>
-            <input
-              id="path-option-default"
-              type="radio"
-              value="default"
-              checked={!this.state.useCustomDownloadLocation} onChange={this.onChangeCustomDownloadLocation}
-            />
-            <label htmlFor="path-option-default">Default download location</label>
-          </li>
-          <li>
-            <input
-              id="path-option-custom"
-              type="radio"
-              value="custom"
-              checked={this.state.useCustomDownloadLocation} onChange={this.onChangeCustomDownloadLocation}
-            />
-            <div className="path-wrapper">
-              <label htmlFor="path-option-custom">Subfolder within default location</label>
-              <input
-                id="path"
-                type="text"
-                value={this.state.customDownloadLocation}
-                disabled={!this.state.useCustomDownloadLocation}
-                onChange={this.onChangeCustomDownloadLocationPath}
-              />
-            </div>
-          </li>
-        </ul>
-      </form>
-    );
-  }
-
   onSubmitDownloadOptions(event) {
     event.preventDefault();
     this.onClickDownload();
@@ -179,20 +120,6 @@ class SaveImageDialog extends React.Component {
 
   onClickDismiss() {
     window.close();
-  }
-
-  onChangeCustomDownloadLocation(event) {
-    if (event.target.value === 'default') {
-      this.setState({ useCustomDownloadLocation: false });
-    } else {
-      this.setState({ useCustomDownloadLocation: true });
-    }
-  }
-
-  onChangeCustomDownloadLocationPath(event) {
-    this.setState({
-      customDownloadLocation: event.target.value
-    });
   }
 
   onToggleFileList() {
@@ -225,7 +152,9 @@ class SaveImageDialog extends React.Component {
           Download {pluralize('image', this.imageCount(), true)}
         </button>
 
-        {this.renderDownloadOptions()}
+        <DownloadOptions
+          onSubmit={this.onSubmitDownloadOptions}
+        />
         <div className="progress align-center padding" title="Click to see image list" onClick={this.onToggleFileList}>
           <div className="progress-count">
             {this.getCompletedTabs().length} of {this.imageCount()}
