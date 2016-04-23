@@ -1,4 +1,5 @@
 import React from 'react';
+import update from 'react-addons-update';
 import chrome from 'chrome';
 import pluralize from 'pluralize';
 import _ from 'underscore';
@@ -83,12 +84,11 @@ class SaveImageDialog extends React.Component {
 
   onClickDownload() {
     getTabsWithImages((tabs) => {
-      const statuses = _.reduce(tabs, (memo, tab) => {
-        memo[tab.id] = PENDING;
-        return memo;
-      }, {});
       this.setState({
-        downloadStatuses: statuses
+        downloadStatuses: _.reduce(tabs, (memo, tab) => {
+          memo[tab.id] = PENDING;
+          return memo;
+        }, {})
       });
 
       tabs.forEach((tab) => {
@@ -97,11 +97,11 @@ class SaveImageDialog extends React.Component {
           (id) => {
             if (id) {
               // Download successful
-              const newStatuses = _({}).extend(this.state.downloadStatuses);
-              newStatuses[tab.id] = COMPLETE;
-              this.setState({
-                downloadStatuses: newStatuses
-              });
+              this.setState(update(this.state, {
+                downloadStatuses: {
+                  [tab.id]: { $set: COMPLETE }
+                }
+              }));
             } else {
               // Download failed
             }
