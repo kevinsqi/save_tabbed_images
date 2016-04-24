@@ -30,6 +30,7 @@ class Extension extends React.Component {
     this.onClickDownload = this.onClickDownload.bind(this);
     this.onSubmitDownloadOptions = this.onSubmitDownloadOptions.bind(this);
     this.onClickCloseDownloadedTabs = this.onClickCloseDownloadedTabs.bind(this);
+    this.downloadImage = this.downloadImage.bind(this);
   }
 
   componentDidMount() {
@@ -87,6 +88,24 @@ class Extension extends React.Component {
     });
   }
 
+  downloadImage(tab) {
+    chrome.downloads.download(
+      { url: tab.url, conflictAction: 'uniquify' },
+      (downloadID) => {
+        if (downloadID) {
+          // download successful
+          this.setState(update(this.state, {
+            downloadStatuses: {
+              [tab.id]: { $set: COMPLETE }
+            }
+          }));
+        } else {
+          // download failed
+        }
+      }
+    );
+  }
+
   onClickDownload() {
     getTabsWithImages((tabs) => {
       this.setState({
@@ -96,29 +115,13 @@ class Extension extends React.Component {
         }, {})
       });
 
-      tabs.forEach((tab) => {
-        chrome.downloads.download(
-          { url: tab.url, conflictAction: 'uniquify' },
-          (id) => {
-            if (id) {
-              // Download successful
-              this.setState(update(this.state, {
-                downloadStatuses: {
-                  [tab.id]: { $set: COMPLETE }
-                }
-              }));
-            } else {
-              // Download failed
-            }
-          }
-        );
-      });
+      tabs.forEach(this.downloadImage);
     });
   }
 
   renderCloseButton() {
     return this.isComplete() ? (
-      <button id="close-tabs" onClick={this.onClickCloseDownloadedTabs}>Close Downloaded Tabs</button>
+      <button id="close-tabs" onClick={this.onClickCloseDownloadedTabs}>Close downloaded tabs</button>
     ) : null;
   }
 
