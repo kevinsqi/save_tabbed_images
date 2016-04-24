@@ -17,16 +17,15 @@ class Extension extends React.Component {
     super(props);
 
     this.state = {
-      tabList: [],
+      imageList: [],
       downloadStatuses: {},
       hideImageList: true,
     };
 
     this.getCompletedTabs = this.getCompletedTabs.bind(this);
+    this.getImageCount = this.getImageCount.bind(this);
     this.isDownloading = this.isDownloading.bind(this);
     this.isComplete = this.isComplete.bind(this);
-    this.hasImages = this.hasImages.bind(this);
-    this.imageCount = this.imageCount.bind(this);
     this.onToggleFileList = this.onToggleFileList.bind(this);
     this.onClickDownload = this.onClickDownload.bind(this);
     this.onSubmitDownloadOptions = this.onSubmitDownloadOptions.bind(this);
@@ -43,7 +42,7 @@ class Extension extends React.Component {
 
   componentDidMount() {
     getTabsWithImages((tabs) => {
-      this.setState({ tabList: tabs });
+      this.setState({ imageList: tabs });
     });
   }
 
@@ -91,12 +90,8 @@ class Extension extends React.Component {
     });
   }
 
-  hasImages() {
-    return this.imageCount() > 0;
-  }
-
-  imageCount() {
-    return this.state.tabList.length;
+  getImageCount() {
+    return this.state.imageList.length;
   }
 
   onSubmitDownloadOptions(event) {
@@ -126,10 +121,10 @@ class Extension extends React.Component {
   }
 
   render() {
-    return this.hasImages() ? (
+    return this.getImageCount() > 0 ? (
       <div>
         <button id="download" disabled={this.isDownloading()} onClick={this.onClickDownload}>
-          Download {pluralize('image', this.imageCount(), true)}
+          Download {pluralize('image', this.getImageCount(), true)}
         </button>
 
         <DownloadOptions
@@ -137,12 +132,12 @@ class Extension extends React.Component {
         />
         <div className="progress align-center padding" title="Click to see image list" onClick={this.onToggleFileList}>
           <div className="progress-count">
-            {this.getCompletedTabs().length} of {this.imageCount()}
+            {this.getCompletedTabs().length} of {this.getImageCount()}
           </div>
           <div className="text-smaller">images downloaded</div>
         </div>
         <ImageList
-          imageList={this.state.tabList}
+          imageList={this.state.imageList}
           downloadStatuses={this.state.downloadStatuses}
           hidden={this.state.hideImageList}
         />
