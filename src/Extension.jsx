@@ -6,6 +6,7 @@ import _ from 'underscore';
 
 import { getTabsWithImages } from './backgroundHelpers';
 import DownloadOptions from './DownloadOptions';
+import ImageList from './ImageList';
 import NoImagesMessage from './NoImagesMessage';
 
 const PENDING = 'pending';
@@ -18,7 +19,7 @@ class Extension extends React.Component {
     this.state = {
       tabList: [],
       downloadStatuses: {},
-      showFileList: false,
+      hideImageList: true,
     };
 
     this.getCompletedTabs = this.getCompletedTabs.bind(this);
@@ -26,7 +27,6 @@ class Extension extends React.Component {
     this.isComplete = this.isComplete.bind(this);
     this.hasImages = this.hasImages.bind(this);
     this.imageCount = this.imageCount.bind(this);
-    this.renderTabListItem = this.renderTabListItem.bind(this);
     this.onToggleFileList = this.onToggleFileList.bind(this);
     this.onClickDownload = this.onClickDownload.bind(this);
     this.onSubmitDownloadOptions = this.onSubmitDownloadOptions.bind(this);
@@ -95,14 +95,6 @@ class Extension extends React.Component {
     return this.imageCount() > 0;
   }
 
-  renderTabListItem(tab) {
-    return (
-      <li key={tab.id} className={this.state.downloadStatuses[tab.id]}>
-        <a href={tab.url}>{tab.url}</a>
-      </li>
-    );
-  }
-
   imageCount() {
     return this.state.tabList.length;
   }
@@ -123,19 +115,8 @@ class Extension extends React.Component {
 
   onToggleFileList() {
     this.setState({
-      showFileList: !this.state.showFileList,
+      hideImageList: !this.state.hideImageList,
     });
-  }
-
-  renderFileList() {
-    if (!this.state.showFileList) {
-      return null;
-    }
-    return (
-      <ul id="files" className="background-gray padding text-smaller">
-        {this.state.tabList.map(this.renderTabListItem)}
-      </ul>
-    );
   }
 
   renderCloseButton() {
@@ -145,7 +126,7 @@ class Extension extends React.Component {
   }
 
   render() {
-    const content = this.hasImages() ? (
+    return this.hasImages() ? (
       <div>
         <button id="download" disabled={this.isDownloading()} onClick={this.onClickDownload}>
           Download {pluralize('image', this.imageCount(), true)}
@@ -160,14 +141,16 @@ class Extension extends React.Component {
           </div>
           <div className="text-smaller">images downloaded</div>
         </div>
-        {this.renderFileList()}
+        <ImageList
+          imageList={this.state.tabList}
+          downloadStatuses={this.state.downloadStatuses}
+          hidden={this.state.hideImageList}
+        />
         {this.renderCloseButton()}
       </div>
     ) : (
       <NoImagesMessage onClickDismiss={this.onClickDismiss} />
     );
-
-    return <div>{content}</div>;
   }
 }
 
