@@ -18,17 +18,18 @@ class DownloadOptions extends React.Component {
 
   componentDidMount() {
     chrome.downloads.onDeterminingFilename.addListener((downloadItem, suggest) => {
+      const path = this.getDownloadPath();
       suggest({
-        filename: this.getDownloadPath() + downloadItem.filename
+        filename: (path ? `${path}/${downloadItem.filename}` : downloadItem.filename)
       });
     });
   }
 
   getDownloadPath() {
-    if (this.state.useDownloadPath) {
-      return this.state.downloadPath + '/';
+    if (this.state.useDownloadPath && this.state.downloadPath) {
+      return this.state.downloadPath;
     }
-    return '';
+    return null;
   }
 
   onChangeUseDownloadPath(event) {
@@ -41,7 +42,7 @@ class DownloadOptions extends React.Component {
 
   onChangeDownloadPath(event) {
     this.setState({
-      downloadPath: event.target.value
+      downloadPath: event.target.value.trim()
     });
   }
 
