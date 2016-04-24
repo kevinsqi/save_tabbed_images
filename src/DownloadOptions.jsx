@@ -7,8 +7,8 @@ class DownloadOptions extends React.Component {
     super(props);
 
     this.state = {
-      useCustomDownloadLocation: false,
-      customDownloadLocation: `SaveTabbedImages-${dateFormat(new Date(), 'yyyy-mm-dd-HHMMss')}`,
+      useDownloadPath: false,
+      downloadPath: `SaveTabbedImages-${dateFormat(new Date(), 'yyyy-mm-dd-HHMMss')}`,
     };
 
     this.getDownloadPath = this.getDownloadPath.bind(this);
@@ -25,23 +25,23 @@ class DownloadOptions extends React.Component {
   }
 
   getDownloadPath() {
-    if (this.state.useCustomDownloadLocation) {
-      return this.state.customDownloadLocation + '/';
+    if (this.state.useDownloadPath) {
+      return this.state.downloadPath + '/';
     }
     return '';
   }
 
   onChangeCustomDownloadLocation(event) {
     if (event.target.value === 'default') {
-      this.setState({ useCustomDownloadLocation: false });
+      this.setState({ useDownloadPath: false });
     } else {
-      this.setState({ useCustomDownloadLocation: true });
+      this.setState({ useDownloadPath: true });
     }
   }
 
   onChangeCustomDownloadLocationPath(event) {
     this.setState({
-      customDownloadLocation: event.target.value
+      downloadPath: event.target.value
     });
   }
 
@@ -58,7 +58,7 @@ class DownloadOptions extends React.Component {
               id="path-option-default"
               type="radio"
               value="default"
-              checked={!this.state.useCustomDownloadLocation} onChange={this.onChangeCustomDownloadLocation}
+              checked={!this.state.useDownloadPath} onChange={this.onChangeCustomDownloadLocation}
             />
             <label htmlFor="path-option-default">Default download location</label>
           </li>
@@ -67,15 +67,15 @@ class DownloadOptions extends React.Component {
               id="path-option-custom"
               type="radio"
               value="custom"
-              checked={this.state.useCustomDownloadLocation} onChange={this.onChangeCustomDownloadLocation}
+              checked={this.state.useDownloadPath} onChange={this.onChangeCustomDownloadLocation}
             />
             <div className="path-wrapper">
               <label htmlFor="path-option-custom">Subfolder within default location</label>
               <input
                 id="path"
                 type="text"
-                value={this.state.customDownloadLocation}
-                disabled={!this.state.useCustomDownloadLocation}
+                value={this.state.downloadPath}
+                disabled={!this.state.useDownloadPath}
                 onChange={this.onChangeCustomDownloadLocationPath}
               />
             </div>
