@@ -12,8 +12,8 @@ class DownloadOptions extends React.Component {
     };
 
     this.getDownloadPath = this.getDownloadPath.bind(this);
-    this.onChangeCustomDownloadLocation = this.onChangeCustomDownloadLocation.bind(this);
-    this.onChangeCustomDownloadLocationPath = this.onChangeCustomDownloadLocationPath.bind(this);
+    this.onChangeUseDownloadPath = this.onChangeUseDownloadPath.bind(this);
+    this.onChangeDownloadPath = this.onChangeDownloadPath.bind(this);
   }
 
   componentDidMount() {
@@ -31,7 +31,7 @@ class DownloadOptions extends React.Component {
     return '';
   }
 
-  onChangeCustomDownloadLocation(event) {
+  onChangeUseDownloadPath(event) {
     if (event.target.value === 'default') {
       this.setState({ useDownloadPath: false });
     } else {
@@ -39,7 +39,7 @@ class DownloadOptions extends React.Component {
     }
   }
 
-  onChangeCustomDownloadLocationPath(event) {
+  onChangeDownloadPath(event) {
     this.setState({
       downloadPath: event.target.value
     });
@@ -58,7 +58,7 @@ class DownloadOptions extends React.Component {
               id="path-option-default"
               type="radio"
               value="default"
-              checked={!this.state.useDownloadPath} onChange={this.onChangeCustomDownloadLocation}
+              checked={!this.state.useDownloadPath} onChange={this.onChangeUseDownloadPath}
             />
             <label htmlFor="path-option-default">Default download location</label>
           </li>
@@ -67,16 +67,15 @@ class DownloadOptions extends React.Component {
               id="path-option-custom"
               type="radio"
               value="custom"
-              checked={this.state.useDownloadPath} onChange={this.onChangeCustomDownloadLocation}
+              checked={this.state.useDownloadPath} onChange={this.onChangeUseDownloadPath}
             />
             <div className="path-wrapper">
               <label htmlFor="path-option-custom">Subfolder within default location</label>
               <input
-                id="path"
                 type="text"
                 value={this.state.downloadPath}
                 disabled={!this.state.useDownloadPath}
-                onChange={this.onChangeCustomDownloadLocationPath}
+                onChange={this.onChangeDownloadPath}
               />
             </div>
           </li>
