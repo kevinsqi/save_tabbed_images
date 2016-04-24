@@ -32,14 +32,6 @@ class Extension extends React.Component {
     this.onClickCloseDownloadedTabs = this.onClickCloseDownloadedTabs.bind(this);
   }
 
-  getCompletedTabs() {
-    return _.compact(
-      _.map(this.state.downloadStatuses, (status, tabID) => {
-        return (status === COMPLETE) ? parseInt(tabID, 10) : null;
-      })
-    );
-  }
-
   componentDidMount() {
     getTabsWithImages((tabs) => {
       this.setState({ imageList: tabs });
@@ -54,11 +46,45 @@ class Extension extends React.Component {
   }
 
   isComplete() {
-    return _.size(this.state.downloadStatuses) > 0 &&
+    return (
+      _.size(this.state.downloadStatuses) > 0 &&
       _.all(
         _.values(this.state.downloadStatuses),
         (status) => (status === COMPLETE)
-      );
+      )
+    );
+  }
+
+  getCompletedTabs() {
+    return _.compact(
+      _.map(this.state.downloadStatuses, (status, tabID) => {
+        return (status === COMPLETE) ? parseInt(tabID, 10) : null;
+      })
+    );
+  }
+
+  getImageCount() {
+    return this.state.imageList.length;
+  }
+
+  onSubmitDownloadOptions(event) {
+    event.preventDefault();
+    this.onClickDownload();
+  }
+
+  onClickCloseDownloadedTabs() {
+    chrome.tabs.remove(this.getCompletedTabs());
+    this.onClickDismiss();
+  }
+
+  onClickDismiss() {
+    window.close();
+  }
+
+  onToggleFileList() {
+    this.setState({
+      hideImageList: !this.state.hideImageList,
+    });
   }
 
   onClickDownload() {
@@ -87,30 +113,6 @@ class Extension extends React.Component {
           }
         );
       });
-    });
-  }
-
-  getImageCount() {
-    return this.state.imageList.length;
-  }
-
-  onSubmitDownloadOptions(event) {
-    event.preventDefault();
-    this.onClickDownload();
-  }
-
-  onClickCloseDownloadedTabs() {
-    chrome.tabs.remove(this.getCompletedTabs());
-    this.onClickDismiss();
-  }
-
-  onClickDismiss() {
-    window.close();
-  }
-
-  onToggleFileList() {
-    this.setState({
-      hideImageList: !this.state.hideImageList,
     });
   }
 
