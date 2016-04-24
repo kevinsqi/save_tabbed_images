@@ -122,6 +122,15 @@ class Extension extends React.Component {
     ) : null;
   }
 
+  renderProgress() {
+    return (
+      <div className="progress align-center padding" title="Click to see image list" onClick={this.onToggleFileList}>
+        <div className="progress-count">{this.getCompletedTabs().length} of {this.getImageCount()}</div>
+        <div className="text-smaller">images downloaded</div>
+      </div>
+    );
+  }
+
   render() {
     return this.getImageCount() > 0 ? (
       <div>
@@ -129,20 +138,16 @@ class Extension extends React.Component {
           Download {pluralize('image', this.getImageCount(), true)}
         </button>
 
-        <DownloadOptions
-          onSubmit={this.onSubmitDownloadOptions}
-        />
-        <div className="progress align-center padding" title="Click to see image list" onClick={this.onToggleFileList}>
-          <div className="progress-count">
-            {this.getCompletedTabs().length} of {this.getImageCount()}
-          </div>
-          <div className="text-smaller">images downloaded</div>
-        </div>
+        <DownloadOptions onSubmit={this.onSubmitDownloadOptions} />
+
+        {this.renderProgress()}
+
         <ImageList
           imageList={this.state.imageList}
           downloadStatuses={this.state.downloadStatuses}
           hidden={this.state.hideImageList}
         />
+
         {this.renderCloseButton()}
       </div>
     ) : (
