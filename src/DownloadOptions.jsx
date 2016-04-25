@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import chrome from 'chrome';
 import dateFormat from 'dateformat';
+import sanitizePath from './sanitizePath';
 
 class DownloadOptions extends React.Component {
   constructor(props) {
@@ -26,8 +27,8 @@ class DownloadOptions extends React.Component {
   }
 
   getDownloadPath() {
-    if (this.state.useDownloadPath && this.state.downloadPath) {
-      return this.state.downloadPath;
+    if (this.state.useDownloadPath && this.state.downloadPath && this.state.downloadPath.trim()) {
+      return this.state.downloadPath.trim();  // need to trim right side of string
     }
     return null;
   }
@@ -42,7 +43,7 @@ class DownloadOptions extends React.Component {
 
   onChangeDownloadPath(event) {
     this.setState({
-      downloadPath: event.target.value.trim()
+      downloadPath: sanitizePath(event.target.value).trimLeft()
     });
   }
 
