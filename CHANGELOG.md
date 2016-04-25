@@ -1,3 +1,15 @@
+## 0.5.0
+
+* Update UI to be full-width
+* Hide download list until expanded, and show file count progress
+* Fix #17 - trim whitespace from path
+* Restrict subfolder to be alphanumeric, underscore, dash, space
+
+Internal changes:
+
+* Upgrade to react 15.0.x
+* Extract subcomponents
+
 ## 0.4.1
 
 * Improve message when there are no images to download
