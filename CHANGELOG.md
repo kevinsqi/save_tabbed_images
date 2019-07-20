@@ -1,3 +1,7 @@
+## 0.7.0
+
+* Add tabbed webm downloads #45
+
 ## 0.6.0
 
 * Use split incognito mode so downloads in incognito mode aren't logged after window closes [[#35]](https://github.com/iqnivek/save_tabbed_images/pull/35)
