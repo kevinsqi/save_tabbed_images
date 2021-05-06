@@ -15,7 +15,7 @@
     "react": "~15.0.0",
     "react-addons-update": "^15.0.1",
     "react-dom": "~15.0.0",
-    "underscore": "~1.8.3"
+    "underscore": "~1.12.1"
   },
   "devDependencies": {
     "babel-core": "^6.3.15",
