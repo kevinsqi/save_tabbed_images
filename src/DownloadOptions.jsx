@@ -9,7 +9,7 @@ class DownloadOptions extends React.Component {
 
     this.state = {
       useDownloadPath: false,
-      downloadPath: `SaveTabbedImages-${dateFormat(new Date(), 'yyyy-mm-dd-HHMMss')}`,
+      downloadPath: `SaveTabbedMedia-${dateFormat(new Date(), 'yyyy-mm-dd-HHMMss')}`,
     };
 
     this.getDownloadPath = this.getDownloadPath.bind(this);

@@ -11,7 +11,10 @@ const imageMimeTypes = {
   'image/png':  true,
   'image/gif':  true,
   'image/webp': true,
-  'video/webm': true
+  'video/webm': true,
+  'video/x-msvideo' : true,
+  'video/mp4' : true,
+  'video/mpeg': true
 };
 
 const imageExtensions = {
@@ -20,7 +23,10 @@ const imageExtensions = {
   'png':  true,
   'gif':  true,
   'webp': true,
-  'webm': true
+  'webm': true,
+  'mp4': true,
+  'mkv': true,
+  'avi': true
 };
 
 // Track which tabs are images based on MIME type
