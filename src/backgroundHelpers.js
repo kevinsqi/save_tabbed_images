@@ -18,11 +18,11 @@ export function getContentTypeHeader(headers) {
   return contentTypeHeaderValue;
 }
 
-export function getTabsWithImages(callback) {
+export function getTabsWithMedia(callback) {
   chrome.tabs.query(
     { currentWindow: true },
     (tabs) => {
-      // Query background process for which tabs are images
+      // Query background process for which tabs are images/video
       chrome.runtime.sendMessage({ type: 'checktabs', tabs: tabs }, (response) => {
         callback(response.tabs);
       });

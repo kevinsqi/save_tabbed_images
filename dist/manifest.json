@@ -1,6 +1,6 @@
 {
-  "name": "Save Tabbed Images",
-  "description": "Save images currently opened in tabs.",
+  "name": "Save Tabbed Media",
+  "description": "Save images or videos currently opened in tabs.",
   "version": "0.7.0",
   "minimum_chrome_version": "16.0.884",
   "manifest_version": 2,

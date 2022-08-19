@@ -1,7 +1,7 @@
 {
-  "name": "save_tabbed_images",
+  "name": "save_tabbed_media",
   "private": true,
-  "description": "Save Tabbed Images Chrome Extension",
+  "description": "Save Tabbed Media Chrome Extension",
   "scripts": {
     "build": "webpack -p",
     "clean": "rm -f ./dist/js/* package.zip",

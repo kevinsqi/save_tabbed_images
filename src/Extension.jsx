@@ -4,10 +4,10 @@ import chrome from 'chrome';
 import pluralize from 'pluralize';
 import _ from 'underscore';
 
-import { getTabsWithImages } from './backgroundHelpers';
+import { getTabsWithMedia } from './backgroundHelpers';
 import DownloadOptions from './DownloadOptions';
 import ImageList from './ImageList';
-import NoImagesMessage from './NoImagesMessage';
+import NoMediaMessage from './NoMediaMessage';
 
 const PENDING = 'pending';
 const COMPLETE = 'complete';
@@ -34,7 +34,7 @@ class Extension extends React.Component {
   }
 
   componentDidMount() {
-    getTabsWithImages((tabs) => {
+    getTabsWithMedia((tabs) => {
       this.setState({ imageList: tabs });
     });
   }
@@ -107,7 +107,7 @@ class Extension extends React.Component {
   }
 
   onClickDownload() {
-    getTabsWithImages((tabs) => {
+    getTabsWithMedia((tabs) => {
       this.setState({
         downloadStatuses: _.reduce(tabs, (memo, tab) => {
           memo[tab.id] = PENDING;
@@ -129,7 +129,7 @@ class Extension extends React.Component {
     return (
       <div className="progress align-center padding" title="Click to see image list" onClick={this.onToggleFileList}>
         <div className="progress-count">{this.getCompletedTabs().length} of {this.getImageCount()}</div>
-        <div className="text-smaller">images downloaded</div>
+        <div className="text-smaller">images/videos downloaded</div>
       </div>
     );
   }
@@ -154,7 +154,7 @@ class Extension extends React.Component {
         {this.renderCloseButton()}
       </div>
     ) : (
-      <NoImagesMessage onClickDismiss={this.onClickDismiss} />
+      <NoMediaMessage onClickDismiss={this.onClickDismiss} />
     );
   }
 }
